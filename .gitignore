@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.env.local
+.DS_Store
+.run
+
+# DB SQLite khi chay server tu THU MUC GOC (DB_PATH mac dinh la ./data/app.db,
+# tinh theo thu muc chay). server/.gitignore da che server/data/ nhung khong che
+# cai nay -> chay `npm start` o goc roi `git add -A` la commit ca hash mat khau.
+data/

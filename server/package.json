@@ -1,0 +1,19 @@
+{
+  "name": "podmktool-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Backend cho Podmktool: auth, proxy AI (giấu key), đo usage",
+  "scripts": {
+    "start": "node --env-file=.env index.js",
+    "dev": "node --env-file=.env --watch index.js",
+    "cli": "node --env-file=.env cli.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=22.5"
+  }
+}

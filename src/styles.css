@@ -1,0 +1,2300 @@
+/* ============================================================
+   Podmktool — hệ thiết kế
+   Dark là bản chuẩn, light là bản dẫn xuất (không phải đảo màu).
+   Neutral ngả xanh-đá cho có chiều sâu; accent indigo; 4 màu ngữ nghĩa.
+   MỌI cặp chữ/nền đã đo ≥ 4.5:1 ở CẢ HAI theme — đừng thêm màu hardcode.
+   Đổi theme: theme.js đặt data-theme trên <html>. CSS không đọc
+   prefers-color-scheme trực tiếp, để nút chuyển tay luôn thắng.
+============================================================ */
+
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* nền — 4 nấc, càng cao càng nổi */
+  --bg: #0b0d12;
+  --surface: #12151d;
+  --surface-2: #191d27;
+  --surface-3: #1f2431;
+
+  /* viền — hairline, không dùng màu đặc */
+  --line: rgba(255, 255, 255, 0.07);
+  --line-hot: rgba(255, 255, 255, 0.15);
+
+  /* chữ — 3 nấc, nấc 3 vẫn phải đọc được (5.0:1) */
+  --text: #e8ebf2;
+  --text-2: #98a1b3;
+  --text-3: #848da0;
+
+  /* Dải màu thương hiệu: xanh mực → mint (#014872 → #A0EACF).
+     brand-a/brand-b là NỬA ĐẬM của dải, dùng cho nút chạy — cắt ở đó để chữ
+     trắng luôn đạt ≥4.5:1; kéo tới tận mint thì đầu sáng không đọc nổi.
+     brand-mint là ĐẦU SÁNG, dành riêng cho công tắc chế độ. Hai control lấy
+     hai đầu khác nhau của cùng một dải: vẫn một họ, mà không thể nhầm nhau. */
+  --brand-a: #0a5f8e;
+  --brand-b: #158a80;
+  --brand-mint: #a0eacf;
+  --brand-mint-fg: #04303c;
+  --brand-track: rgba(160, 234, 207, 0.12);
+  --brand-track-line: rgba(160, 234, 207, 0.30);
+
+  /* accent + 4 màu ngữ nghĩa. -soft = nền nhạt, -line = viền */
+  --accent: #4fc9c0;
+  --accent-fg: #04262f;
+  --accent-soft: rgba(79, 201, 192, 0.14);
+  --accent-line: rgba(79, 201, 192, 0.42);
+
+  --ok: #3fbf87;
+  --ok-soft: rgba(63, 191, 135, 0.13);
+  --ok-line: rgba(63, 191, 135, 0.4);
+
+  --gold: #e0b155;
+  --gold-hover: #eec87b;
+  --gold-fg: #1a1508;
+  --gold-soft: rgba(224, 177, 85, 0.12);
+  --gold-line: rgba(224, 177, 85, 0.42);
+
+  --danger: #f0757a;
+  --danger-soft: rgba(240, 117, 122, 0.12);
+  --danger-line: rgba(240, 117, 122, 0.4);
+
+  --info: #5fa8f5;
+  --info-soft: rgba(95, 168, 245, 0.12);
+  --info-line: rgba(95, 168, 245, 0.4);
+
+  --busy: var(--busy);
+
+  /* nút chính — nghịch đảo nền, 1 cái / màn hình */
+  --solid: #e8ebf2;
+  --solid-hover: #ffffff;
+  --solid-fg: #0b0d12;
+
+  --overlay: rgba(4, 6, 10, 0.72);
+  --shadow-panel: 0 16px 40px rgba(0, 0, 0, 0.45);
+  --shadow-pop: 0 12px 28px rgba(0, 0, 0, 0.5);
+
+  --radius: 10px;
+  --radius-lg: 14px;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f5f6f9;
+  --surface: #ffffff;
+  --surface-2: #eff1f5;
+  --surface-3: #e9ecf2;
+
+  --line: rgba(16, 22, 38, 0.10);
+  --line-hot: rgba(16, 22, 38, 0.20);
+
+  --text: #131722;
+  --text-2: #575f70;
+  --text-3: #5f6879;
+
+  --brand-a: #014872;
+  --brand-b: #0f7a72;
+  --brand-mint: #a0eacf;
+  --brand-mint-fg: #013d5c;
+  --brand-track: rgba(160, 234, 207, 0.38);
+  --brand-track-line: rgba(1, 72, 114, 0.22);
+
+  --accent: #014872;
+  --accent-fg: #ffffff;
+  --accent-soft: rgba(1, 72, 114, 0.09);
+  --accent-line: rgba(1, 72, 114, 0.30);
+
+  --ok: #0a7a4f;
+  --ok-soft: rgba(10, 122, 79, 0.10);
+  --ok-line: rgba(10, 122, 79, 0.32);
+
+  --gold: #8a6209;
+  --gold-hover: #6d4d05;
+  --gold-fg: #ffffff;
+  --gold-soft: rgba(138, 98, 9, 0.10);
+  --gold-line: rgba(138, 98, 9, 0.32);
+
+  --danger: #c22633;
+  --danger-soft: rgba(194, 38, 51, 0.09);
+  --danger-line: rgba(194, 38, 51, 0.3);
+
+  --info: #1a5fb4;
+  --info-soft: rgba(26, 95, 180, 0.09);
+  --info-line: rgba(26, 95, 180, 0.3);
+
+  --busy: #6d3fc4;
+
+  --solid: #131722;
+  --solid-hover: #000000;
+  --solid-fg: #ffffff;
+
+  --overlay: rgba(19, 23, 34, 0.55);
+  --shadow-panel: 0 12px 32px rgba(19, 23, 34, 0.10);
+  --shadow-pop: 0 10px 24px rgba(19, 23, 34, 0.16);
+}
+
+/* Đổi theme mượt, nhưng bỏ qua nếu máy user bật giảm chuyển động */
+@media (prefers-reduced-motion: no-preference) {
+  body, .panel, .topbar, .sidebar, .cta-card, .adv2, .tile {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', 'Be Vietnam Pro', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- App shell ---------- */
+.app { height: 100vh; display: flex; flex-direction: column; }
+
+.topbar {
+  height: 56px;
+  flex: 0 0 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo {
+  width: 30px; height: 30px;
+  display: grid; place-items: center;
+  border: 1px solid var(--line-hot);
+  border-radius: 6px;
+  color: var(--text-2);
+  font-size: 13px;
+}
+.brand-text .title { font-size: 0.9375rem; font-weight: 560; letter-spacing: -0.01em; }
+.brand-text .subtitle { font-size: 0.75rem; color: var(--text-3); }
+
+.status {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.8125rem; color: var(--text-2);
+}
+.status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
+.status.busy .dot { background: var(--busy); animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+/* ---------- Layout: sidebar + stage ---------- */
+.layout { flex: 1; display: flex; min-height: 0; }
+
+.sidebar {
+  width: 400px; flex: 0 0 400px;
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+.stage {
+  flex: 1; min-width: 0;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+/* ---------- Panels ---------- */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  animation: rise 0.3s ease both;
+}
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.phead { display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+.phead .idx { font-size: 0.75rem; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.phead h2 { margin: 0; font-size: 0.9375rem; font-weight: 560; letter-spacing: -0.01em; }
+.phead .note { margin-left: auto; font-size: 0.75rem; color: var(--text-3); }
+
+/* ---------- Form controls ---------- */
+.lbl {
+  display: block;
+  font-size: 0.75rem; color: var(--text-2);
+  margin: 10px 0 5px;
+}
+.lbl:first-of-type { margin-top: 0; }
+.lbl .count { color: var(--text); font-variant-numeric: tabular-nums; }
+
+input[type="text"], input[type="password"], input:not([type]), input[type="number"], textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 8px 10px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+input::placeholder, textarea::placeholder { color: var(--text-3); }
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+textarea { resize: vertical; line-height: 1.5; }
+
+.hint { margin: 6px 0 0; font-size: 0.75rem; color: var(--text-3); line-height: 1.5; }
+
+/* Dropdown chọn model — bám đúng style của input để hàng shared-input đồng đều */
+.model-select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.model-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.model-note { min-height: 2.1em; }
+
+.or {
+  display: flex; align-items: center; text-align: center;
+  color: var(--text-3); font-size: 0.75rem; margin: 12px 0;
+}
+.or::before, .or::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.or span { padding: 0 10px; }
+
+.stack { display: block; }
+
+/* file button */
+.filebtn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 100%;
+  padding: 8px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text-2);
+  font-size: 0.875rem; font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.filebtn:hover { color: var(--text); border-color: var(--line-hot); }
+
+.thumb {
+  display: block; width: 100%; max-height: 160px; object-fit: contain;
+  margin-top: 10px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: var(--bg);
+}
+
+/* switch */
+.switch { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; color: var(--text-2); cursor: pointer; }
+.switch input { width: auto; accent-color: var(--accent); }
+
+/* buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text-2);
+  font: inherit; font-size: 0.875rem; font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.btn:hover:not(:disabled) { color: var(--text); border-color: var(--line-hot); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn.primary {
+  background: var(--solid);
+  border-color: var(--solid);
+  color: var(--solid-fg);
+  font-weight: 560;
+}
+.btn.primary:hover:not(:disabled) { background: var(--solid-hover); border-color: var(--solid-hover); }
+
+.ghost {
+  background: none; border: none;
+  color: var(--text-2); font: inherit; font-size: 0.75rem;
+  cursor: pointer; padding: 4px 6px; border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.ghost:hover { color: var(--text); background: var(--surface-2); }
+
+/* chips (ratio) */
+.row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.row.custom { margin-top: 8px; }
+.chip {
+  padding: 6px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text-2);
+  font: inherit; font-size: 0.8125rem;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.chip:hover { color: var(--text); border-color: var(--line-hot); }
+.chip.active { color: var(--text); border-color: var(--line-hot); background: var(--surface); }
+.num { width: 78px; }
+.x { color: var(--text-3); }
+
+.range { width: 100%; accent-color: var(--accent); margin: 6px 0; }
+
+/* scenes / background control */
+.scenes-list { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.scene-row { display: flex; align-items: center; gap: 8px; }
+.scene-idx {
+  flex: 0 0 auto; width: 18px; height: 18px;
+  display: grid; place-items: center;
+  font-size: 0.75rem; color: var(--text-3);
+  border: 1px solid var(--line); border-radius: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.scene-row input { font-size: 0.8125rem; padding: 6px 8px; }
+
+.error {
+  padding: 10px 12px;
+  border: 1px solid var(--danger-line);
+  background: var(--danger-soft);
+  border-radius: 6px;
+  color: var(--danger); font-size: 0.8125rem;
+}
+/* Cảnh báo — không phải lỗi chặn, chỉ nhắc cấu hình chưa khớp */
+.error.warn {
+  border-color: var(--gold-line);
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+
+/* ---------- Stage: preview & output ---------- */
+.stage-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.stage-head .btn { width: auto; margin: 0; }
+.stage-head-right { display: flex; align-items: center; gap: 10px; }
+.mode-switch { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); }
+
+.meta {
+  display: flex; gap: 20px; flex-wrap: wrap;
+  padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.75rem; color: var(--text-3);
+}
+.meta b { color: var(--text-2); font-weight: 500; margin-left: 4px; }
+
+/* Output controls — nằm giữa stage, ngay trên grid preview */
+.output-bar {
+  display: flex; align-items: flex-end; gap: 20px; flex-wrap: wrap;
+  padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.ob-group { display: flex; flex-direction: column; gap: 6px; }
+.ob-group.grow { flex: 1 1 180px; min-width: 160px; }
+.ob-label { font-size: 0.75rem; color: var(--text-2); }
+.ob-label .count { color: var(--text); font-variant-numeric: tabular-nums; }
+.output-bar .range { margin: 0; height: 28px; }
+.btn.ob-gen { width: auto; margin: 0; white-space: nowrap; }
+.btn.ob-combo {
+  width: auto; margin: 0; white-space: nowrap;
+  border-color: var(--gold-line); color: var(--gold);
+}
+.btn.ob-combo:hover:not(:disabled) { border-color: var(--gold); color: var(--gold-hover); background: var(--gold-soft); }
+
+.empty {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 16px; text-align: center;
+  border: 1px dashed var(--line); border-radius: var(--radius-lg);
+  min-height: 320px; padding: 40px;
+}
+.empty-ref { max-width: 280px; max-height: 280px; object-fit: contain; border: 1px solid var(--line); border-radius: 10px; }
+.empty-frame {
+  width: 64px; height: 64px; display: grid; place-items: center;
+  border: 1px solid var(--line-hot); border-radius: 14px;
+  color: var(--text-3); font-size: 22px;
+}
+.empty-text { margin: 0; color: var(--text-2); font-size: 0.875rem; max-width: 360px; }
+.empty-text b { color: var(--text); font-weight: 500; }
+
+/* results grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+.tile {
+  border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: var(--surface); overflow: hidden;
+  animation: rise 0.3s ease both;
+}
+.tile-frame {
+  width: 100%; background: var(--bg);
+  display: grid; place-items: center; overflow: hidden;
+}
+.tile-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ph { display: flex; align-items: center; gap: 8px; color: var(--text-3); font-size: 0.8125rem; padding: 20px; text-align: center; }
+.ph.err { color: var(--danger); }
+.spin {
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 1.5px solid var(--line-hot); border-top-color: var(--text-2);
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.tile-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; }
+.tile-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  min-height: 32px;
+}
+.tile-top .tile-scene { flex: 1; }
+.ghost.dl { color: var(--text); white-space: nowrap; }
+.tile-actions.spread { width: 100%; justify-content: space-between; gap: 6px; }
+.tile-actions.spread .ghost { flex: 1; text-align: center; white-space: nowrap; }
+.ghost.icon {
+  font-size: 0.9375rem; font-weight: 600; line-height: 1;
+  padding: 6px 0;
+  border: 1px solid var(--line); border-radius: 6px;
+}
+.ghost.icon:hover { border-color: var(--line-hot); }
+
+/* per-action colors — dễ phân biệt 4 nút */
+.ref-badge {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 1px 8px;
+  border: 1px solid var(--gold-line);
+  border-radius: 999px;
+  color: var(--gold);
+  font-size: 0.75rem; font-weight: 600;
+  vertical-align: middle;
+}
+
+/* ---------- Lightbox zoom ---------- */
+.tile-frame img { cursor: zoom-in; }
+.lb-backdrop {
+  position: fixed; inset: 0; z-index: 60;
+  background: var(--overlay);
+  display: grid; place-items: center;
+  padding: 28px;
+  animation: rise 0.15s ease both;
+}
+.lb-img {
+  max-width: 94vw; max-height: 94vh;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: var(--shadow-pop);
+}
+.lb-close {
+  position: fixed; top: 14px; right: 18px;
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--line-hot);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 18px; line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.lb-close:hover { background: var(--surface-3); border-color: var(--line-hot); }
+.tile-scene {
+  font-size: 0.75rem; color: var(--text-3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;
+}
+.tile-actions { display: flex; gap: 2px; flex: 0 0 auto; }
+
+/* ---------- Scrollbars ---------- */
+.sidebar::-webkit-scrollbar, .stage::-webkit-scrollbar { width: 10px; }
+.sidebar::-webkit-scrollbar-thumb, .stage::-webkit-scrollbar-thumb {
+  background: var(--surface-2); border-radius: 10px; border: 3px solid var(--bg);
+}
+
+/* ---------- Topbar action + polish ---------- */
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+.auto-btn { width: auto; margin: 0; padding: 8px 16px; white-space: nowrap; }
+.tile { transition: border-color 0.15s ease; }
+/* Ảnh từ Lifestyle Combo — viền vàng highlight để phân biệt */
+.tile.combo { border-color: var(--gold-line); box-shadow: 0 0 0 1px var(--gold-line); }
+.tile.combo .tile-top { background: var(--gold-soft); }
+.tile:hover { border-color: var(--line-hot); }
+
+/* ---------- Podmktool: tabs (2 pipeline branches) ---------- */
+/* Nhóm trái: logo + chuyển nhánh. Trước đây tabs nằm giữa topbar, trôi nổi và
+   to quá mức so với vai trò của nó — gom về sát brand, thu thành segmented nhỏ. */
+.topbar-left { display: flex; align-items: center; gap: 16px; min-width: 0; }
+
+.tabs {
+  display: inline-flex; gap: 2px;
+  padding: 2px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.tab {
+  padding: 4px 10px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--text-3);
+  font: inherit; font-size: 0.75rem; font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.tab:hover:not(:disabled) { color: var(--text); border-color: var(--line-hot); }
+.tab:disabled { opacity: 0.45; cursor: not-allowed; }
+.tab.gold.active { color: var(--gold); border-color: var(--gold-line); background: var(--gold-soft); }
+.tab.green.active { color: var(--ok); border-color: var(--ok-line); background: var(--ok-soft); }
+.tab.blue.active { color: var(--info); border-color: var(--info-line); background: var(--info-soft); }
+
+/* ---------- Shared input strip (keys + Product URL) ---------- */
+.shared-input {
+  display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.shared-input .si-block { min-width: 200px; flex: 0 1 auto; }
+.shared-input .si-block.grow { flex: 1 1 280px; }
+.shared-input .row { flex-wrap: nowrap; }
+.shared-input .btn, .shared-input .filebtn { width: auto; margin: 0; white-space: nowrap; }
+.shared-input .lbl { margin-top: 0; }
+.app > .error { margin: 10px 20px 0; }
+
+.thumb.small { width: 38px; height: 38px; max-height: 38px; margin: 0; object-fit: cover; flex: 0 0 auto; }
+
+/* Ô ảnh tham chiếu — to, viền gold, không thể nhầm với kết quả */
+.ref-box {
+  position: relative;
+  width: 96px; height: 96px;
+  flex: 0 0 auto;
+  border: 2px solid var(--gold);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: zoom-in;
+  background: var(--bg);
+  box-shadow: 0 0 0 3px var(--gold-soft), var(--shadow-panel);
+}
+.ref-box img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.ref-box-label {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 2px 0;
+  text-align: center;
+  background: var(--overlay);
+  color: var(--gold);
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.03em;
+}
+
+/* ---------- Checkbox line (info bổ sung / redesign toàn bộ) ---------- */
+.checkline {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.875rem; color: var(--text-2); cursor: pointer;
+  margin-bottom: 6px;
+}
+.checkline input { width: auto; accent-color: var(--accent); }
+
+/* ---------- Branch accents ---------- */
+.idx.gold { color: var(--gold); }
+.idx.green { color: var(--ok); }
+.panel.green { border-color: var(--ok-soft); }
+.phead .status { margin-left: auto; }
+
+/* ---------- Element list (redesign line) ---------- */
+.element-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.element-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--line); border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.element-row:hover { border-color: var(--line-hot); }
+.element-row.selected { border-color: var(--ok-line); background: var(--ok-soft); }
+.element-row input { width: auto; flex: 0 0 auto; accent-color: var(--ok); }
+.element-thumb {
+  width: 44px; height: 44px; object-fit: contain; flex: 0 0 auto;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+}
+.element-text { display: flex; flex-direction: column; min-width: 0; }
+.element-text b { font-size: 0.8125rem; font-weight: 560; color: var(--text); }
+.element-text small {
+  font-size: 0.75rem; color: var(--text-3); line-height: 1.4;
+  overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+
+/* ---------- Bottom-center progress bar ---------- */
+.pbar {
+  position: fixed;
+  left: 50%; transform: translateX(-50%);
+  bottom: 18px;
+  width: min(560px, calc(100vw - 32px));
+  background: var(--surface);
+  border: 1px solid var(--line-hot);
+  border-radius: 14px;
+  padding: 10px 14px;
+  z-index: 40;
+  box-shadow: var(--shadow-panel);
+  animation: rise 0.25s ease both;
+}
+.pbar-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-bottom: 7px;
+  font-size: 0.8125rem;
+}
+.pbar-label {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--text-2);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.pbar-num { color: var(--text); font-variant-numeric: tabular-nums; font-weight: 560; }
+.pbar-track {
+  height: 6px; border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.pbar-fill {
+  height: 100%; border-radius: 999px;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+.pbar-fill.indet { width: 40%; animation: indet 1.2s ease-in-out infinite; }
+@keyframes indet {
+  0% { margin-left: -40%; }
+  100% { margin-left: 100%; }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; flex: none; border-right: none; border-bottom: 1px solid var(--line); max-height: 55vh; }
+  .stage { padding: 16px; }
+}
+
+/* ---------- Auth: màn đăng nhập + danh tính trên topbar ---------- */
+.boot {
+  min-height: 100vh;
+  display: grid; place-items: center;
+  color: var(--text-3); font-size: 0.875rem;
+}
+
+.login-wrap { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+.login-card {
+  width: 100%; max-width: 360px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 28px 24px;
+  display: flex; flex-direction: column;
+}
+.login-card .brand { margin-bottom: 20px; }
+.login-card .btn { margin-top: 18px; }
+.login-card .error { margin-top: 14px; }
+.login-card .hint { margin-top: 14px; text-align: center; }
+
+.who { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.who-name {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.8125rem; color: var(--text-2, var(--text));
+}
+.who-name .badge {
+  font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;
+  padding: 2px 6px; border-radius: 999px;
+  background: var(--gold-soft); color: var(--gold);
+  border: 1px solid var(--gold-line);
+}
+
+/* Nút cờ đổi ngôn ngữ */
+.lang { display: inline-flex; gap: 2px; margin-right: 4px; }
+.flag {
+  background: none; border: 1px solid transparent; border-radius: 6px;
+  font-size: 15px; line-height: 1; padding: 4px 5px; cursor: pointer;
+  filter: grayscale(1) opacity(0.6);
+  transition: filter 0.15s ease, border-color 0.15s ease;
+}
+.flag:hover { filter: grayscale(0) opacity(0.85); }
+.flag.active { filter: none; border-color: var(--line-hot); }
+
+/* ---------- 5 ô ảnh tham chiếu (Main Ref + 4 Sub Ref) ---------- */
+/* Cố ý NHỎ: đây là ô nhập phụ, không phải nội dung chính. Trước đó dàn 5 cột
+   full-width chiếm cả một dải màn hình — sai mức độ quan trọng. */
+.ref-slots {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 20px 10px;
+  border-bottom: 1px solid var(--line);
+}
+.ref-slots-hint {
+  flex: 1 1 220px;
+  align-self: center;
+  margin: 0;
+  min-width: 180px;
+}
+
+.ref-slot { width: 64px; flex: 0 0 64px; display: flex; flex-direction: column; gap: 3px; }
+.ref-slot-name {
+  font-size: 0.75rem; color: var(--text-3);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ref-slot.filled .ref-slot-name { color: var(--text-2); }
+
+.ref-slot-frame {
+  position: relative;
+  width: 64px; height: 64px;
+  display: grid; place-items: center;
+  background: var(--bg);
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.ref-slot.filled .ref-slot-frame { border-style: solid; cursor: zoom-in; }
+.ref-slot-frame img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.ref-slot-empty { color: var(--text-3); font-size: 14px; }
+/* Main Ref: viền vàng để tách hẳn khỏi 4 ô phụ */
+.ref-slot:first-child .ref-slot-frame { border-color: var(--gold-line); }
+.ref-slot:first-child.filled .ref-slot-frame {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px var(--gold-soft);
+}
+
+.ref-slot-x {
+  position: absolute; top: 2px; right: 2px;
+  width: 16px; height: 16px; line-height: 1;
+  display: grid; place-items: center;
+  background: var(--overlay);
+  border: none; border-radius: 6px;
+  color: var(--danger); font-size: 13px; cursor: pointer;
+  opacity: 0; transition: opacity 0.15s ease;
+}
+.ref-slot-frame:hover .ref-slot-x { opacity: 1; }
+
+.ref-slot-acts { display: flex; gap: 3px; }
+.mini {
+  flex: 1; min-width: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 2px 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text-3);
+  font: inherit; font-size: 0.75rem;
+  cursor: pointer; white-space: nowrap;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.mini:hover:not(:disabled) { color: var(--text); border-color: var(--line-hot); }
+.mini:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Nút đẩy ảnh đã gen vào ô Sub Ref — đường vào không cần link sản phẩm */
+.act-sub { font-size: 0.75rem; font-weight: 600; letter-spacing: -0.02em; }
+.act-sub:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ---------- Content FB tab ---------- */
+.content-tab { display: flex; gap: 16px; padding: 4px 0; align-items: flex-start; }
+.content-input-col { flex: 0 0 46%; max-width: 560px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.content-output-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.content-output-panel { margin: 0; }
+.content-genbar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.content-genbar .content-count { margin: 0; flex: 1; min-width: 160px; }
+.content-genbtn { width: auto; margin: 0; white-space: nowrap; }
+.content-output-empty { padding: 48px 16px; text-align: center; color: var(--text-3); font-size: 0.875rem; border: 1px dashed var(--line); border-radius: var(--radius); }
+@media (max-width: 1000px) {
+  .content-tab { flex-direction: column; }
+  .content-input-col { flex-basis: auto; max-width: none; width: 100%; }
+  .content-output-col { position: static; width: 100%; }
+}
+.content-block {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: 16px;
+}
+.content-block h3 { font-size: 0.9375rem; margin: 0 0 12px; font-weight: 600; }
+.content-block h3 .hint { font-weight: 400; }
+.content-block-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.content-block-head h3 { margin: 0; }
+
+.content-basegrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+.content-basethumb {
+  position: relative; padding: 0; border: 2px solid var(--line); border-radius: 6px;
+  overflow: hidden; cursor: pointer; background: var(--surface-2); aspect-ratio: 1; width: 100%;
+}
+.content-basethumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.content-basethumb:hover { border-color: var(--line-hot); }
+.content-basethumb.sel { border-color: var(--info); }
+.content-check {
+  position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--info); color: var(--accent-fg); font-size: 0.8125rem; display: flex; align-items: center; justify-content: center;
+}
+.content-basedel {
+  position: absolute; top: 4px; left: 4px; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--overlay); color: var(--accent-fg); font-size: 0.875rem; line-height: 18px; text-align: center;
+  opacity: 0; transition: opacity 0.12s;
+}
+.content-basethumb:hover .content-basedel { opacity: 1; }
+.content-basedel:hover { background: var(--danger); }
+
+.content-ratios { display: flex; gap: 8px; flex-wrap: wrap; }
+.content-ratio {
+  display: flex; flex-direction: column; gap: 2px; align-items: flex-start; text-align: left;
+  padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface-2);
+  color: var(--text-2); cursor: pointer; min-width: 140px;
+}
+.content-ratio:hover { border-color: var(--line-hot); color: var(--text); }
+.content-ratio.sel { border-color: var(--info-line); background: var(--info-soft); color: var(--info); }
+.content-ratio strong { font-size: 0.875rem; }
+
+.content-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.content-actions .btn { width: auto; margin: 0; }
+
+.content-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.content-result { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface-2); }
+.content-result img { width: 100%; display: block; cursor: zoom-in; }
+.content-result-actions { display: flex; gap: 8px; padding: 8px; }
+.content-ph { padding: 32px 12px; text-align: center; color: var(--text-3); font-size: 0.875rem; }
+.content-ph.err { color: var(--danger); }
+.content-master { width: 100%; resize: vertical; line-height: 1.5; }
+.content-infotoggle { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); }
+.content-locrow { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.chip.loc { padding: 5px 8px; display: inline-flex; align-items: center; }
+.chip.loc svg { display: block; }
+
+/* ---------- Admin panel ---------- */
+.admin-overlay {
+  position: fixed; inset: 0; z-index: 60; background: var(--overlay);
+  display: flex; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow: auto;
+}
+.admin-modal {
+  width: 100%; max-width: 860px; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-panel); overflow: hidden;
+}
+.admin-head { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.admin-head h2 { margin: 0; font-size: 1.05rem; }
+.admin-tabs { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); }
+.admin-head .ghost { margin-left: auto; }
+.admin-body { padding: 16px 18px; }
+.admin-newuser { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.admin-newuser input, .admin-newuser select { flex: 1; min-width: 120px; }
+.admin-newuser .btn { width: auto; margin: 0; white-space: nowrap; }
+.admin-tablewrap { overflow-x: auto; }
+.admin-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.admin-table th, .admin-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.admin-table th { color: var(--text-2); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.admin-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.admin-actions { display: flex; gap: 6px; }
+.pill { font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); }
+.pill.ok { color: var(--ok); border-color: var(--ok-line); }
+.pill.off { color: var(--danger); border-color: var(--danger-line); }
+.pill.admin { color: var(--accent); border-color: var(--accent-line); }
+.admin-bulk { margin-bottom: 14px; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); }
+.admin-bulk textarea { width: 100%; resize: vertical; font-family: ui-monospace, monospace; font-size: 0.8125rem; }
+.admin-bulk code { font-size: 0.8125rem; background: var(--surface); padding: 1px 5px; border-radius: 6px; }
+.admin-bulk-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.admin-bulk-row .lbl { margin: 0; }
+.admin-bulk-row input { flex: 1; min-width: 120px; }
+.admin-bulk-row .btn { width: auto; margin: 0; white-space: nowrap; }
+.admin-bulk-res ul { font-size: 0.8125rem; max-height: 180px; overflow: auto; }
+.bulk-created { color: var(--ok); }
+.bulk-exists { color: var(--text-3); }
+.bulk-error { color: var(--danger); }
+
+.errboundary { margin: 24px; padding: 16px; border: 1px solid var(--danger-line); border-radius: var(--radius-lg); background: var(--surface); }
+.errboundary h3 { margin: 0 0 10px; color: var(--danger); }
+.errboundary pre { white-space: pre-wrap; word-break: break-word; background: var(--surface-2); padding: 12px; border-radius: 6px; font-size: 0.8125rem; color: var(--text); overflow-x: auto; }
+.errboundary .btn { width: auto; margin-top: 10px; }
+.content-refrow { display: flex; gap: 12px; flex-wrap: wrap; }
+.content-refcell { flex: 1; min-width: 160px; }
+.content-refcell .content-block-head { margin-bottom: 8px; }
+.content-layers { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.content-layers textarea { width: 100%; resize: vertical; }
+.content-styleref { display: flex; align-items: center; gap: 12px; }
+.content-styleref img { width: 96px; height: 96px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); cursor: zoom-in; }
+.content-count { display: flex; align-items: center; gap: 12px; margin: 12px 0; }
+.content-count .range { flex: 1; max-width: 220px; margin: 0; }
+
+/* ---------- Nguồn thông tin (Link / Text) trong shared-input ---------- */
+.src-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+.src-toggle { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); }
+.seg {
+  padding: 5px 12px; border: none; border-radius: 6px; background: transparent;
+  color: var(--text-2); cursor: pointer; font-size: 0.8125rem; font-weight: 500; white-space: nowrap;
+}
+.seg:hover { color: var(--text); }
+.seg.active { background: var(--surface); color: var(--text); border: 1px solid var(--line-hot); }
+.paste-text { width: 100%; resize: vertical; line-height: 1.5; }
+
+/* ---------- Camera-angle picker ---------- */
+.angle-tools { gap: 6px; margin-bottom: 8px; }
+.angle-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip.angle { display: inline-flex; align-items: center; gap: 5px; font-size: 0.8125rem; padding: 5px 9px; }
+.angle-tag {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.02em; line-height: 1;
+  padding: 2px 4px; border-radius: 6px; background: var(--line); color: var(--text-2);
+}
+
+/* ---------- Camera-angle strip (above the output grid) ---------- */
+.angle-strip {
+  margin: 12px 0 6px; padding: 10px 12px;
+  border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface);
+}
+.angle-strip-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+.angle-strip .angle-tools { display: inline-flex; gap: 6px; margin: 0; }
+.chip.mini { padding: 3px 8px; font-size: 0.75rem; }
+.angle-thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+.angle-thumb {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  width: 62px; padding: 6px 3px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--surface-2); color: var(--text-3); cursor: pointer;
+}
+.angle-thumb:hover { border-color: var(--line-hot); color: var(--text-2); }
+.angle-thumb.active { border-color: var(--accent-line); background: var(--accent-soft); color: var(--text); }
+.angle-thumb svg { display: block; width: 40px; height: 40px; }
+.angle-thumb-label { font-size: 0.75rem; line-height: 1.15; text-align: center; color: inherit; }
+
+/* ---------- Per-scene shot control ---------- */
+.scene-row { align-items: flex-start; }
+.scene-row .scene-idx { margin-top: 7px; }
+.scene-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.scene-ctl { display: flex; align-items: center; gap: 8px; }
+.shot-seg { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface-2); }
+.seg2 { padding: 3px 8px; border: none; border-radius: 6px; background: transparent; color: var(--text-2); cursor: pointer; font-size: 0.75rem; white-space: nowrap; }
+.seg2:hover { color: var(--text); }
+.seg2.active { background: var(--surface); color: var(--text); border: 1px solid var(--line-hot); }
+.reopt { width: 26px; height: 26px; flex: 0 0 auto; }
+
+/* Cảnh chuẩn bắt buộc của team — nhấn màu vàng để tách khỏi cảnh tự do */
+.req-tag {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.02em; white-space: nowrap;
+  padding: 2px 8px; border-radius: 6px;
+  background: var(--gold-soft); color: var(--gold);
+}
+.scene-row.req .scene-main { border-left: 2px solid var(--gold-line); padding-left: 8px; }
+
+/* ---------- Work area: cột Phối cảnh bên trái + lưới ảnh bên phải ---------- */
+.work-area { display: flex; gap: 16px; align-items: flex-start; }
+.scene-col { flex: 0 0 300px; max-width: 320px; position: sticky; top: 12px; }
+.scene-col .scene-panel { margin: 0; max-height: calc(100vh - 32px); overflow-y: auto; }
+.grid-wrap { flex: 1; min-width: 0; }
+@media (max-width: 1100px) {
+  .work-area { flex-direction: column; }
+  .scene-col { flex-basis: auto; max-width: none; width: 100%; position: static; }
+  .scene-col .scene-panel { max-height: none; }
+}
+
+/* ============================================================
+   REDESIGN UI (2026-08-20) — progressive disclosure cho New Mockup
+   Trái = thông tin sản phẩm. Phải = 1 hành động chính, phần
+   tinh chỉnh gập lại, kết quả chiếm phần lớn màn hình.
+============================================================ */
+
+/* Sidebar hẹp lại: giờ chỉ còn thông tin sản phẩm, nhường chỗ cho lưới ảnh */
+.layout.redesign .sidebar { width: 340px; flex: 0 0 340px; }
+@media (max-width: 1100px) {
+  .layout.redesign .sidebar { width: 100%; flex: 1 1 auto; }
+}
+
+/* Nhóm field phụ trong sidebar (features / description) */
+.mini-adv { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+.mini-adv > summary {
+  list-style: none; cursor: pointer;
+  font-size: 0.75rem; color: var(--text-3);
+  display: flex; align-items: center; gap: 6px;
+  padding: 2px 0;
+  transition: color 0.15s ease;
+}
+.mini-adv > summary::-webkit-details-marker { display: none; }
+.mini-adv > summary::before { content: '▸'; font-size: 0.75rem; transition: transform 0.15s ease; }
+.mini-adv[open] > summary::before { transform: rotate(90deg); }
+.mini-adv > summary:hover { color: var(--text-2); }
+
+/* ---------- 1 · Card hành động chính ---------- */
+.cta-card {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line-hot);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
+}
+.cta-count { display: flex; align-items: center; gap: 10px; min-width: 200px; flex: 0 1 240px; }
+.cta-count .ob-label { white-space: nowrap; }
+.cta-count .range { flex: 1; margin: 0; }
+
+.fixed-pill {
+  padding: 4px 10px; border-radius: 999px;
+  background: var(--gold-soft);
+  border: 1px solid var(--gold-line);
+  color: var(--gold);
+  font-size: 0.75rem; font-weight: 600; white-space: nowrap;
+}
+
+.btn.cta-go {
+  width: auto; margin: 0 0 0 auto;
+  padding: 10px 24px;
+  font-size: 0.9375rem;
+  border-radius: 10px;
+}
+.btn.primary.combo {
+  background: var(--gold); border-color: var(--gold); color: var(--gold-fg);
+}
+.btn.primary.combo:hover:not(:disabled) { background: var(--gold-hover); border-color: var(--gold-hover); }
+
+/* ---------- 2 · Nâng cao (gập) ---------- */
+.adv2 {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.adv2 > summary {
+  list-style: none; cursor: pointer; user-select: none;
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px;
+  font-size: 0.875rem; color: var(--text-2);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.adv2 > summary::-webkit-details-marker { display: none; }
+.adv2 > summary:hover { color: var(--text); background: var(--surface-2); }
+.adv2[open] > summary { border-bottom: 1px solid var(--line); }
+.chev { font-size: 0.75rem; color: var(--text-3); transition: transform 0.15s ease; display: inline-block; }
+.adv2[open] .chev { transform: rotate(90deg); }
+.opt {
+  margin-left: auto;
+  padding: 2px 8px; border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--text-3); font-size: 0.75rem; white-space: nowrap;
+}
+
+.adv2-body { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+.adv-block { display: flex; flex-direction: column; gap: 8px; }
+.adv-block + .adv-block { border-top: 1px solid var(--line); padding-top: 16px; }
+.adv-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.adv-head .angle-tools { margin: 0; display: inline-flex; }
+.adv-block .lbl:first-of-type { margin-top: 0; }
+.adv-inline { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+@media (max-width: 720px) { .adv-inline { grid-template-columns: 1fr; } }
+.adv-inline > div { display: flex; flex-direction: column; gap: 6px; }
+
+.btn.ghost-btn { margin-top: 4px; font-size: 0.8125rem; color: var(--text-3); }
+.btn.ghost-btn:hover:not(:disabled) { color: var(--text-2); }
+
+/* ---------- 3 · Kết quả ---------- */
+.res-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.res-head h3 { margin: 0; font-size: 0.875rem; font-weight: 560; letter-spacing: -0.01em; }
+.res-tools { display: flex; align-items: center; gap: 4px; }
+.res-tools .ghost.on { color: var(--text); background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line-hot); }
+
+.work-area.with-scenes { align-items: flex-start; }
+
+/* ---------- Tile: 1 thao tác chính + menu ⋯ ---------- */
+.tile-actions2 { position: relative; display: flex; align-items: center; gap: 6px; width: 100%; }
+.p-btn {
+  flex: 1; min-width: 0;
+  padding: 5px 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-hot);
+  border-radius: 6px;
+  color: var(--text);
+  font: inherit; font-size: 0.75rem; font-weight: 500;
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.p-btn:hover { background: var(--accent-soft); border-color: var(--accent); }
+.more-btn {
+  flex: 0 0 auto;
+  width: 28px; height: 26px;
+  display: grid; place-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text-2);
+  font: inherit; font-size: 0.875rem; line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.more-btn:hover { color: var(--text); border-color: var(--line-hot); }
+
+.tile-menu {
+  position: absolute; right: 0; bottom: calc(100% + 6px);
+  z-index: 20;
+  min-width: 168px;
+  display: flex; flex-direction: column;
+  padding: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-hot);
+  border-radius: 10px;
+  box-shadow: var(--shadow-panel);
+  animation: rise 0.15s ease both;
+}
+.tile-menu button {
+  width: 100%; text-align: left;
+  padding: 6px 10px;
+  background: none; border: none; border-radius: 6px;
+  color: var(--text-2);
+  font: inherit; font-size: 0.8125rem;
+  cursor: pointer; white-space: nowrap;
+  transition: color 0.12s ease, background 0.12s ease;
+}
+.tile-menu button:hover:not(:disabled) { color: var(--text); background: var(--surface); }
+.tile-menu button:disabled { opacity: 0.4; cursor: not-allowed; }
+.tile-menu button.active { color: var(--gold); }
+
+/* Content FB — dùng lại card hành động / khối gập của New Mockup */
+.content-output-col .cta-card { margin-bottom: 0; }
+.cta-hint { margin: -6px 0 0; }
+.content-output-col .adv2-body .content-refrow { margin: 0; }
+.content-output-col .res-head { margin-top: 4px; }
+
+/* ---------- Nút đổi theme (3 nấc: theo máy → sáng → tối) ---------- */
+.theme-toggle {
+  width: 30px; height: 30px; flex: 0 0 auto;
+  display: grid; place-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.theme-toggle:hover { color: var(--text); border-color: var(--line-hot); background: var(--surface-3); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ============================================================
+   Workbar — một hàng: chế độ chạy · nguồn sản phẩm · model
+   Thay cho khối shared-input cũ cao ~300px. Thứ dùng-một-lần
+   (model, ref phụ) gập lại; thứ dùng mỗi lượt thì luôn hiện.
+============================================================ */
+.workbar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.flow-switch {
+  display: inline-flex; gap: 2px; padding: 2px;
+  border: 1px solid var(--line-hot); border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+
+.wb-url { display: flex; align-items: center; gap: 8px; flex: 1 1 340px; min-width: 260px; }
+.wb-url input { margin: 0; }
+.wb-url .btn { width: auto; margin: 0; white-space: nowrap; }
+.wb-paste { padding: 12px 20px 0; }
+
+/* Model — popover, mở ra rồi đóng lại, không chiếm chỗ thường trực */
+.cfg { position: relative; margin-left: auto; }
+.cfg > summary {
+  list-style: none; cursor: pointer; white-space: nowrap;
+  padding: 8px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--line); border-radius: 6px;
+  color: var(--text-2); font-size: 0.8125rem;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.cfg > summary::-webkit-details-marker { display: none; }
+.cfg > summary:hover { color: var(--text); border-color: var(--line-hot); }
+.cfg[open] > summary { color: var(--text); border-color: var(--line-hot); }
+.cfg-pop {
+  position: absolute; right: 0; top: calc(100% + 6px); z-index: 40;
+  width: 340px; padding: 14px;
+  background: var(--surface); border: 1px solid var(--line-hot);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-pop);
+  animation: rise 0.15s ease both;
+}
+.cfg-pop .lbl:first-of-type { margin-top: 0; }
+
+/* Ref slots — gập, summary báo sẵn đã có mấy ảnh */
+.refbar { border-bottom: 1px solid var(--line); }
+.refbar > summary {
+  list-style: none; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 20px;
+  font-size: 0.8125rem; color: var(--text-2);
+}
+.refbar > summary::-webkit-details-marker { display: none; }
+.refbar > summary:hover { color: var(--text); background: var(--surface); }
+.refbar[open] > summary { border-bottom: 1px solid var(--line); }
+.refbar .chev { font-size: 0.75rem; color: var(--text-3); transition: transform 0.15s ease; }
+.refbar[open] .chev { transform: rotate(90deg); }
+.ref-count {
+  padding: 1px 8px; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--line);
+  font-size: 0.75rem; font-variant-numeric: tabular-nums; color: var(--text);
+}
+.refbar > summary .hint { margin: 0 0 0 auto; }
+
+/* ============================================================
+   Step list — khung Manual dùng chung cho mọi tab
+============================================================ */
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.step {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+.step:hover { border-color: var(--line-hot); }
+.step.is-done { border-color: var(--ok-line); }
+
+.step-head { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+.step-no {
+  flex: 0 0 auto; width: 22px; height: 22px;
+  display: grid; place-items: center;
+  border: 1px solid var(--line-hot); border-radius: 50%;
+  font-size: 0.75rem; color: var(--text-3); font-variant-numeric: tabular-nums;
+}
+.step.is-done .step-no { border-color: var(--ok-line); color: var(--ok); }
+
+.step-title {
+  flex: 1; min-width: 0; text-align: left;
+  display: flex; flex-direction: column; gap: 2px;
+  background: none; border: none; padding: 0; font: inherit;
+  cursor: pointer; color: inherit;
+}
+.step-title:disabled { cursor: default; }
+.step-label { font-size: 0.875rem; font-weight: 500; color: var(--text); }
+.step-hint {
+  font-size: 0.75rem; color: var(--text-3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.step-mark { flex: 0 0 auto; width: 18px; display: grid; place-items: center; font-size: 0.8125rem; }
+.step-mark.done { color: var(--ok); }
+.step-mark.idle::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--surface-3); border: 1px solid var(--line-hot);
+}
+.step-mark.busy .spin { width: 13px; height: 13px; }
+
+.step-run {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-hot); border-radius: 6px;
+  color: var(--text); font: inherit; font-size: 0.8125rem; font-weight: 500;
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.step-run:hover:not(:disabled) { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
+.step-run:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.step-body { padding: 12px 14px 14px 48px; border-top: 1px solid var(--line); }
+.step-body textarea { margin: 0; }
+
+@media (max-width: 720px) {
+  .step-head { flex-wrap: wrap; }
+  .step-title { flex-basis: 100%; order: 3; }
+}
+
+
+/* ============================================================
+   Bước 6 — sửa theo bảng đo. Xem skill ui-optimize.
+============================================================ */
+
+/* [tap-target] WCAG 2.2 AA 2.5.8 — mọi đích trỏ >= 24x24 CSS px.
+   .mini đang 31x20, checkbox 13x13, nút icon 26px. */
+.mini, .chip.mini { min-height: 24px; padding: 4px 8px; }
+.more-btn { width: 28px; height: 26px; min-height: 24px; }
+.ghost.icon, .reopt { min-width: 24px; min-height: 24px; }
+.ghost { min-height: 24px; }
+input[type='checkbox'], input[type='radio'] { width: 18px; height: 18px; }
+/* Ô tick nhỏ hơn 24 nhưng cả dòng nhãn là đích bấm -> đạt qua ngoại lệ
+   "Equivalent" của 2.5.8. Nới vùng bấm ra cả dòng cho đúng thật. */
+.checkline, .switch { min-height: 24px; padding: 2px 0; }
+.range { height: 24px; }
+.step-run, .p-btn { min-height: 26px; }
+.flag { min-width: 28px; min-height: 24px; }
+
+/* [contrast] 2 cặp trượt ngưỡng 4.5:1 khi chữ nằm trên nền màu-mờ.
+   Nền mờ kéo tương phản xuống — bù bằng cách dùng nấc màu đậm hơn. */
+.tab.gold.active { color: var(--text); }
+.tab.gold.active svg { color: var(--gold); }
+.who-name .badge { color: var(--text); border-color: var(--accent-line); background: var(--accent-soft); }
+
+/* [icon] icon luôn đi kèm chữ -> canh giữa theo trục dọc, khoảng cách cố định.
+   flex-shrink:0 để icon không bị bóp méo khi chữ dài. */
+button, .filebtn, summary, .tab, .seg, .seg2, .chip, .lbl { }
+button svg, summary svg, label svg, .tab svg, .seg svg { flex: 0 0 auto; }
+.tab, .seg, .seg2, .chip, .btn, .ghost, .step-run, .p-btn, .more-btn, .mini {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+}
+.tile-menu button { justify-content: flex-start; gap: 8px; }
+.res-tools .ghost, .adv-head .chip { gap: 5px; }
+.logo svg, .empty-frame svg { display: block; }
+.phead .idx { display: inline-flex; align-items: center; }
+
+
+/* [alignment] .seg thường không có viền, .seg.active lại có 1px -> mỗi lần đổi
+   trạng thái hộp xê dịch 1px và kéo lệch cả hàng. Cho viền trong suốt sẵn để
+   kích thước hộp không đổi. Cùng lỗi ở .seg2. */
+.seg, .seg2 { border: 1px solid transparent; }
+
+/* [tap-target] nốt 2 đích còn dưới chuẩn */
+summary { min-height: 24px; }
+.mini-adv > summary, .adv2 > summary, .refbar > summary, .cfg > summary { min-height: 24px; }
+input[type='checkbox'], input[type='radio'] { width: 24px; height: 24px; }
+
+/* [spacing-scale] 18px lạc thang -> 16px */
+.ref-slots-hint { padding-left: 0; }
+
+/* ============================================================
+   BỐ CỤC BA CỘT — 2026-08-20
+   Phiên (trái) · dòng làm việc (giữa) · điều khiển (phải).
+   Phiên là VẬT CHỨA: đổi tab không làm rơi link/ref/ảnh.
+   Thay cho .layout.redesign (.sidebar + .stage) — các luật cũ còn nằm
+   phía trên nhưng không còn ai dùng, dọn ở lần sau.
+============================================================ */
+
+.shell {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) 320px;
+  min-height: 0;
+}
+/* Ô lưới mặc định min-height:auto → cột con phình theo nội dung và tràn khỏi
+   khung thay vì tự cuộn. Ép 0 cho cả lưới lẫn con. */
+.shell, .shell > *, .mid > * { min-height: 0; min-width: 0; }
+
+/* --- cột trái: phiên --- */
+.rail { border-right: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; }
+.rail-top { padding: 10px; border-bottom: 1px solid var(--line); flex: none; }
+.rail-top .btn { width: 100%; margin: 0; }
+.rail-list { overflow: auto; padding: 6px; display: grid; gap: 2px; align-content: start; }
+.rail-item {
+  display: grid; grid-template-columns: 34px 1fr; gap: 9px; align-items: center;
+  padding: 7px; border-radius: var(--radius); border: 1px solid transparent;
+  background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
+.rail-item:hover { background: var(--surface-2); }
+.rail-item.active { background: var(--accent-soft); border-color: var(--accent-line); }
+.rail-item .th {
+  width: 34px; height: 34px; border-radius: 7px; overflow: hidden;
+  background: var(--surface-3); display: grid; place-items: center; color: var(--text-3);
+}
+.rail-item .th img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rail-item .nm { display: block; font-size: 0.75rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rail-item .mt { display: block; font-size: 0.6875rem; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.rail-empty { padding: 14px 10px; font-size: 0.75rem; color: var(--text-3); line-height: 1.5; }
+
+/* --- cột giữa: dòng làm việc --- */
+.mid { display: flex; flex-direction: column; }
+.mid-bar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; flex: none;
+  background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.mid-bar .grow { flex: 1; min-width: 110px; }
+.stream { overflow: auto; padding: 14px; display: grid; gap: 10px; align-content: start; }
+.stream > .panel { margin: 0; }
+
+/* --- cột phải: điều khiển --- */
+.cfg {
+  border-left: 1px solid var(--line); background: var(--surface);
+  overflow: auto; padding: 12px;
+  display: grid; gap: 13px; align-content: start;
+}
+.fold { border-top: 1px solid var(--line); padding-top: 13px; }
+.fold:first-child { border-top: 0; padding-top: 0; }
+.fold > .btn { width: 100%; margin: 8px 0 0; }
+
+/* Class đặt display sẽ đè [hidden] của UA stylesheet — phải nói lại rõ, không
+   thì tab đang ẩn vẫn hiện. */
+.mid[hidden], .cfg[hidden], .ico[hidden], [hidden] { display: none !important; }
+
+/* ============================================================
+   NÚT ICON — một cỡ, vuông
+   Nhãn đổi theo trạng thái (Custom↔Combo, số mẫu, Việt↔Anh) thì nút đổi bề
+   ngang và cả hàng nút nhảy chỗ. Nút icon giữ nguyên hộp ở mọi trạng thái và
+   mọi ngôn ngữ. Nghĩa nằm ở title + aria-label, không nằm ở hình.
+============================================================ */
+
+.ico {
+  display: inline-grid; place-items: center;
+  width: 32px; height: 32px; flex: none; padding: 0;
+  border: 1px solid var(--line-hot); border-radius: var(--radius);
+  background: var(--surface-2); color: var(--text);
+  cursor: pointer;
+}
+.ico:hover:not(:disabled) { border-color: var(--accent-line); }
+.ico.sm { width: 28px; height: 28px; }
+.ico.solid { background: var(--solid); border-color: var(--solid); color: var(--solid-fg); }
+.ico.acc { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
+.ico.warn { background: var(--danger-soft); border-color: var(--danger-line); color: var(--danger); }
+.ico.gold { background: var(--gold-soft); border-color: var(--gold-line); color: var(--gold); }
+.ico.ghost { background: transparent; border-color: var(--line); color: var(--text-2); }
+.ico.on { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
+.ico:disabled { opacity: 0.45; cursor: not-allowed; }
+/* Tắt mà VẪN giữ chỗ: gỡ khỏi luồng thì nút bên cạnh nhảy 32px mỗi lượt chạy.
+   visibility cũng đưa nút ra khỏi thứ tự Tab. */
+.ico.off { visibility: hidden; pointer-events: none; }
+
+/* Số cạnh nút cũng phải đứng yên */
+.num-fix { display: inline-block; min-width: 1.6em; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+   LƯỚI 16 GÓC CAMERA
+   Ô vuông cùng cỡ. Tên góc KHÔNG nhét vào ô (16 nhãn dài làm vỡ lưới) — nằm ở
+   tooltip; góc đang chọn liệt kê thành chữ ngay dưới lưới.
+============================================================ */
+
+.anggrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 6px; }
+.ang {
+  display: grid; place-items: center;
+  aspect-ratio: 1; padding: 0;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface-2); color: var(--text-3);
+  cursor: pointer;
+}
+.ang:hover { border-color: var(--line-hot); color: var(--text-2); }
+.ang.active { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
+.ang svg { display: block; width: 38px; height: 38px; }
+
+.legend { display: flex; gap: 11px; flex-wrap: wrap; margin-top: 8px; font-size: 0.6875rem; color: var(--text-3); }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+
+/* --- ô ảnh kết quả: thao tác dạng icon --- */
+.tile-acts { display: flex; gap: 4px; flex-wrap: wrap; }
+
+/* Cột phải chỉ rộng 320px — vài khối vốn thiết kế cho cột rộng bị bó. */
+.cfg .content-block-head { flex-direction: column; align-items: stretch; gap: 6px; }
+.cfg .content-block-head .filebtn { width: 100%; justify-content: center; }
+.cfg .content-refrow { flex-direction: column; gap: 12px; }
+.cfg .content-ratios { flex-direction: column; }
+.cfg .model-select { width: 100%; }
+/* Hàng ô ref: 5 ô + nút Tải/Từ link trong 296px -> cho cuộn ngang thay vì vỡ */
+.cfg .refslots { flex-wrap: wrap; }
+
+/* Nút xoá phiên: chỉ hiện khi rê vào dòng — 30 dấu × luôn hiện là nhiễu. */
+.rail-item { position: relative; }
+.rail-del {
+  position: absolute; top: 4px; right: 4px;
+  width: 18px; height: 18px; border-radius: 5px;
+  display: none; place-items: center;
+  color: var(--text-3); font-size: 14px; line-height: 1;
+}
+.rail-item:hover .rail-del { display: grid; }
+.rail-del:hover { background: var(--danger-soft); color: var(--danger); }
+
+/* ============================================================
+   CỘT GIỮA BA TẦNG — 2026-08-20
+   thanh nguồn (cố định) · Content+Phối cảnh (cuộn riêng) · khung xem ảnh (cố định)
+   Ảnh là thứ nhìn nhiều nhất nên không bao giờ được cuộn mất.
+============================================================ */
+
+.mid-scroll {
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 44%;      /* mở hết panel cũng không được nuốt khung ảnh */
+  overflow: auto;
+  padding: 12px 14px;
+  display: grid; gap: 10px; align-content: start;
+}
+.mid-scroll > .panel { margin: 0; }
+
+.preview-pane {
+  flex: 1 1 auto;
+  /* Sàn cao: ảnh là thứ ưu tiên. Mở hết panel thì VÙNG CUỘN co lại nhường chỗ,
+     chứ không phải khung ảnh bị bóp — muốn nhìn ô nhập nhiều thì cuộn. */
+  min-height: 340px;
+  display: flex; flex-direction: column;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+.pv-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 14px; flex: none;
+  border-bottom: 1px solid var(--line);
+}
+.pv-head h2 { margin: 0; font-size: 0.875rem; font-weight: 560; letter-spacing: -0.01em; }
+.pv-head .note { font-size: 0.75rem; color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+/* Khung ảnh: co theo chỗ còn lại, ảnh luôn vừa khung, không cắt. */
+.pv-stage {
+  flex: 1 1 auto; min-height: 0;
+  display: grid; place-items: center;
+  padding: 12px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.pv-img {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain;
+  border-radius: var(--radius);
+  cursor: zoom-in;
+  display: block;
+}
+.pv-stage .empty { border: 0; padding: 0; }
+
+.pv-acts {
+  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+  padding: 8px 14px; flex: none;
+  border-top: 1px solid var(--line);
+}
+.pv-scene {
+  font-size: 0.75rem; color: var(--text-2);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 46%;
+}
+
+/* Dải thumbnail: một hàng, cuộn ngang, không bao giờ xuống dòng làm cao thêm. */
+.pv-strip {
+  display: flex; gap: 6px; align-items: center;
+  padding: 8px 14px; flex: none;
+  border-top: 1px solid var(--line);
+  overflow-x: auto; overflow-y: hidden;
+}
+.pv-thumb {
+  position: relative; flex: none;
+  width: 54px; height: 54px; padding: 0;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--surface-2);
+  display: grid; place-items: center;
+  overflow: hidden; cursor: pointer;
+}
+.pv-thumb:hover { border-color: var(--line-hot); }
+.pv-thumb.active { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.pv-thumb.err { border-color: var(--danger-line); background: var(--danger-soft); }
+.pv-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pv-thumb-mark { color: var(--danger); font-weight: 700; }
+.pv-thumb-no {
+  position: absolute; left: 3px; bottom: 3px;
+  min-width: 14px; padding: 0 3px;
+  border-radius: 4px;
+  background: rgba(6, 8, 14, 0.68); color: #eef1f7;
+  font-size: 0.625rem; line-height: 1.4; text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Panel gập được ---- */
+.panel-head {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 0; margin: 0;
+  background: transparent; border: 0; cursor: pointer;
+  font: inherit; color: inherit; text-align: left;
+}
+.panel-head h2 { margin: 0; font-size: 0.875rem; font-weight: 560; letter-spacing: -0.01em; }
+.panel-head .note {
+  margin-left: 4px; min-width: 0;
+  font-size: 0.75rem; color: var(--text-3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.panel-head .chev {
+  margin-left: auto; flex: none;
+  color: var(--text-3); font-size: 0.75rem;
+  transition: transform 0.15s ease;
+}
+.panel-head .chev.open { transform: rotate(90deg); }
+.panel-head:hover .chev { color: var(--text); }
+.panel-body { margin-top: 12px; }
+
+/* ============================================================
+   DANH SÁCH BƯỚC (Manual) — nằm trong cột phải 320px
+   Trước đây bước tự giãn theo nhãn nên cột phình ra, cả app phải cuộn ngang.
+   Giờ khoá: nhãn được phép cắt bớt, hai nút icon KHÔNG co.
+============================================================ */
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.step {
+  display: flex; align-items: center; gap: 7px;
+  min-width: 0;                       /* cho phép con co lại thay vì đẩy rộng */
+  padding: 7px 8px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface-2);
+}
+.step.is-done { border-color: var(--ok-line); }
+.step-no {
+  flex: none;
+  width: 18px; height: 18px; border-radius: 5px;
+  display: grid; place-items: center;
+  background: var(--surface-3); color: var(--text-3);
+  font-size: 0.6875rem; font-variant-numeric: tabular-nums;
+}
+.step-text { flex: 1 1 auto; min-width: 0; display: grid; }
+.step-label {
+  font-size: 0.8125rem; font-weight: 500; color: var(--text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.step-hint {
+  font-size: 0.6875rem; color: var(--text-3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.step-mark { flex: none; width: 16px; height: 16px; display: grid; place-items: center; }
+.step-mark.done { color: var(--ok); }
+.step-mark.idle { border: 1px dashed var(--line-hot); border-radius: 50%; width: 12px; height: 12px; }
+.step .ico { flex: none; }
+
+/* Chốt chặn: cột phải không bao giờ được đẩy cả trang cuộn ngang. */
+.cfg { overflow-x: hidden; }
+.cfg .row, .cfg .anggrid, .cfg .mode-switch { max-width: 100%; }
+/* chev giờ là SVG nên căn theo dòng bằng flex, không phải theo baseline chữ */
+.panel-head .chev { display: inline-grid; place-items: center; }
+
+/* ============================================================
+   ĐỒNG BỘ BA TIÊU ĐỀ — Content · Phối cảnh · Preview & Output
+   Ba khối ngang hàng trong cùng một cột nên PHẢI cùng một kiểu đầu.
+   Khác nhau duy nhất là hành vi: hai cái trên cuộn, cái dưới cố định —
+   điều đó đã tự nói bằng vị trí, không cần khác style để nhắc lại.
+   Bỏ số thứ tự 1·2·3: chúng không phải một trình tự bắt buộc.
+============================================================ */
+
+.sec-head {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  min-height: 26px; padding: 0; margin: 0;
+  background: transparent; border: 0;
+  font: inherit; color: inherit; text-align: left;
+}
+button.sec-head { cursor: pointer; }
+.sec-head h2 {
+  margin: 0; flex: none;
+  font-size: 0.875rem; font-weight: 560; letter-spacing: -0.01em;
+  color: var(--text);
+}
+.sec-head .note {
+  min-width: 0;
+  font-size: 0.75rem; color: var(--text-3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.sec-head .chev {
+  margin-left: auto; flex: none;
+  display: inline-grid; place-items: center;
+  color: var(--text-3);
+  transition: transform 0.15s ease;
+}
+.sec-head .chev.open { transform: rotate(90deg); }
+button.sec-head:hover .chev, button.sec-head:hover h2 { color: var(--text); }
+
+/* Preview & Output mang đúng bộ áo của .panel để ba khối là một họ */
+.preview-pane {
+  margin: 0 14px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+}
+.preview-pane > .sec-head { padding: 12px 14px; }
+.pv-stage { border-top: 1px solid var(--line); }
+
+/* ============================================================
+   Ô NHẬP GOM: nguồn · link · ảnh tham chiếu
+============================================================ */
+
+.src-group {
+  display: flex; align-items: center; gap: 8px;
+  flex: 1 1 auto; min-width: 0;
+  padding: 5px;
+  border: 1px solid var(--line-hot);
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+}
+.src-group:focus-within { border-color: var(--accent-line); }
+/* input nằm TRONG ô gom thì không tự vẽ viền nữa, tránh khung lồng khung */
+.src-group input.bare {
+  border: 0; background: transparent; min-height: 30px; padding: 4px 6px;
+}
+.src-group input.bare:focus { outline: none; border: 0; }
+.src-div { width: 1px; align-self: stretch; background: var(--line-hot); flex: none; }
+
+/* 5 ô ref thu nhỏ, thao tác chỉ hiện khi rê vào */
+.ref-mini { display: flex; gap: 4px; flex: none; }
+.ref-mini-slot {
+  position: relative;
+  width: 32px; height: 32px; flex: none;
+  border: 1px dashed var(--line-hot); border-radius: 8px;
+  background: var(--surface);
+  display: grid; place-items: center;
+  overflow: hidden;
+}
+.ref-mini-slot.filled { border-style: solid; border-color: var(--accent-line); }
+.ref-mini-slot img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; }
+.ref-mini-mark { color: var(--text-3); display: grid; place-items: center; }
+.ref-mini-acts {
+  position: absolute; inset: 0;
+  display: none; gap: 1px;
+  background: var(--surface-3);
+}
+.ref-mini-slot:hover .ref-mini-acts { display: flex; }
+.ref-mini-slot:hover .ref-mini-mark { display: none; }
+.ref-mini-btn {
+  flex: 1; display: grid; place-items: center;
+  border: 0; padding: 0; background: transparent;
+  color: var(--text-2); cursor: pointer;
+}
+.ref-mini-btn:hover { background: var(--accent-soft); color: var(--accent); }
+.ref-mini-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.ref-mini-x {
+  position: absolute; top: 1px; right: 1px;
+  width: 14px; height: 14px; border-radius: 4px;
+  border: 0; padding: 0; line-height: 1;
+  background: rgba(6, 8, 14, 0.66); color: #eef1f7;
+  font-size: 11px; cursor: pointer; display: none;
+}
+.ref-mini-slot.filled:hover .ref-mini-x { display: block; }
+
+/* ============================================================
+   NÚT TO RÕ — nút chạy chính và Run mode
+============================================================ */
+
+.btn-go {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  min-height: 42px; padding: 0 18px; flex: none;
+  border: 1px solid var(--accent); border-radius: var(--radius-lg);
+  background: var(--accent); color: var(--accent-fg);
+  font: inherit; font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.01em;
+  cursor: pointer; white-space: nowrap;
+}
+.btn-go:hover:not(:disabled) { filter: brightness(1.08); }
+.btn-go:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.mode-switch.big { padding: 3px; }
+.mode-switch.big .seg { min-height: 36px; font-size: 0.875rem; }
+
+/* ============================================================
+   ẢNH THAM CHIẾU — hàng riêng, ô đủ to để NHÌN
+   Trước đây 5 ô 32px nhét trong ô nhập, mỗi ô còn kẹp thêm hai nút bé hơn
+   nữa: ảnh không nhìn ra gì, nút thì khó bấm. Giờ 3 ô lớn, mỗi trạng thái
+   chỉ có MỘT cách thao tác — trống thì bấm để tải, có ảnh thì bấm để phóng to.
+============================================================ */
+
+.ref-row {
+  flex: none;
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.ref-row .hint { margin: 0; max-width: 340px; }
+
+.refs { display: flex; gap: 10px; flex: none; }
+.ref-cell {
+  position: relative;
+  width: 104px; height: 104px; flex: none;
+  border: 1px dashed var(--line-hot); border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  display: grid; place-items: center;
+  overflow: hidden;
+}
+.ref-cell.filled { border-style: solid; border-color: var(--line-hot); }
+.ref-cell img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; }
+
+/* Cả ô là vùng bấm — không có nút bé nào bên trong nữa. */
+.ref-drop {
+  width: 100%; height: 100%;
+  display: grid; place-content: center; justify-items: center; gap: 5px;
+  color: var(--text-3); cursor: pointer;
+  font-size: 0.75rem;
+}
+.ref-drop:hover { background: var(--accent-soft); color: var(--accent); }
+.ref-cell:focus-within { border-color: var(--accent-line); }
+
+.ref-x {
+  position: absolute; top: 5px; right: 5px;
+  width: 22px; height: 22px; border-radius: 6px;
+  border: 0; padding: 0; line-height: 1;
+  background: rgba(6, 8, 14, 0.68); color: #eef1f7;
+  font-size: 15px; cursor: pointer; display: none;
+}
+.ref-cell.filled:hover .ref-x { display: block; }
+.ref-x:hover { background: var(--danger); }
+
+/* Run mode đứng cạnh nút chạy nên phải cao ngang nó, không co lại */
+.mid-bar .mode-switch.big { flex: none; }
+.mid-bar .mode-switch.big .seg { min-height: 34px; padding: 4px 14px; }
+
+/* ============================================================
+   KẾT QUẢ: LƯỚI thay cho một-ảnh-lớn
+   Đã thử ảnh lớn + dải thumbnail: ảnh dọc tràn khỏi khung, ảnh nhỏ lọt thỏm,
+   muốn so vài tấm phải bấm qua lại từng cái. Chọn ảnh vốn là việc SO SÁNH nên
+   phải thấy tất cả cùng lúc.
+============================================================ */
+
+.pv-body {
+  flex: 1 1 auto; min-height: 0;
+  overflow: auto;
+  padding: 12px 14px;
+  border-top: 1px solid var(--line);
+}
+.pv-body .grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.pv-body .empty { border: 0; min-height: 100%; }
+
+/* Khung ảnh trong ô: CONTAIN, không cover — cắt mất nửa tấm ảnh cho vừa ô là
+   làm hỏng đúng thứ người dùng đang cần nhìn. */
+.pv-body .tile-frame {
+  aspect-ratio: 1;
+  display: grid; place-items: center;
+  background: var(--bg);
+  overflow: hidden;
+}
+.pv-body .tile-frame img {
+  max-width: 100%; max-height: 100%;
+  width: auto; height: auto;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+
+/* ============================================================
+   HỘP XÁC NHẬN
+============================================================ */
+
+.confirm-back {
+  position: fixed; inset: 0; z-index: 70;
+  display: grid; place-items: center;
+  padding: 24px;
+  background: var(--overlay);
+}
+.confirm {
+  width: min(440px, 100%);
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line-hot); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
+}
+.confirm h3 { margin: 0 0 8px; font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
+.confirm p { margin: 0; font-size: 0.8125rem; color: var(--text-2); line-height: 1.55; }
+.confirm-acts { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+.confirm-acts .btn { width: auto; margin: 0; }
+
+/* ============================================================
+   PHIÊN ĐANG CHỌN — phải nhìn phát ra ngay
+============================================================ */
+
+.rail-item.active {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+}
+/* Vạch dọc bên trái: màu nền nhạt thôi thì ở theme sáng gần như không thấy. */
+.rail-item.active::before {
+  content: '';
+  position: absolute; left: 0; top: 8px; bottom: 8px;
+  width: 3px; border-radius: 0 3px 3px 0;
+  background: var(--accent);
+}
+.rail-item.active .nm { color: var(--accent); font-weight: 600; }
+
+/* ============================================================
+   LƯỚI KẾT QUẢ: TỐI ĐA 5 CỘT
+   auto-fill thuần thì cột nở theo bề ngang, màn rộng ra là 6-7 ảnh một hàng,
+   ảnh nào cũng nhỏ đi. Kẹp sàn = 1/5 bề ngang nên không bao giờ quá 5 cột,
+   màn hẹp thì tự bớt cột chứ không bóp ảnh.
+============================================================ */
+.pv-body .grid {
+  --g: 10px;
+  gap: var(--g);
+  grid-template-columns: repeat(auto-fill, minmax(max(148px, calc((100% - 4 * var(--g)) / 5)), 1fr));
+}
+
+/* Nút đẩy sang Content FB — việc chính ở ô ảnh nên phải khác đám icon xám */
+.btn-fb {
+  display: inline-flex; align-items: center; gap: 5px;
+  min-height: 28px; padding: 4px 10px; flex: none;
+  border: 1px solid var(--accent); border-radius: var(--radius);
+  background: var(--accent); color: var(--accent-fg);
+  font: inherit; font-size: 0.75rem; font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+}
+.btn-fb:hover { filter: brightness(1.08); }
+/* Ô rộng ~160px khi lưới 5 cột: nút "→ Content" + 3 icon không lọt một hàng,
+   nút cuối bị overflow:hidden của .tile cắt mất. Cho xuống dòng thay vì cắt —
+   nút bấm không thấy thì coi như không có. */
+.tile-foot .tile-actions2 {
+  display: flex; align-items: center; gap: 4px;
+  width: 100%; flex-wrap: wrap;
+}
+
+/* Menu ⋯ neo theo toạ độ nút: .tile có overflow:hidden nên bản absolute nằm
+   trong ô bị cắt cụt. position:fixed không bị tổ tiên overflow cắt. */
+.tile-menu.fixed {
+  position: fixed;
+  right: auto; bottom: auto;
+  /* Dịch bằng margin chứ không bằng transform: transform để dành cho bước ghì
+     vào khung nhìn ở JS, dùng chung một thuộc tính là đè mất nhau. */
+  margin-left: -180px;
+  margin-top: -6px;
+  translate: 0 -100%;
+  min-width: 180px;
+  z-index: 80;
+  background: var(--surface);
+}
+
+/* ============================================================
+   CONTENT FB — hai khu: kho ảnh đã đẩy sang · ảnh ĐANG CHỌN phóng to
+   Chỉ có lưới thumbnail thì biết có những ảnh nào, nhưng không nhìn rõ
+   mình sắp overlay chữ lên cái gì.
+============================================================ */
+.base-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 14px;
+  margin-top: 12px;
+}
+.base-list { min-width: 0; }
+.base-pick { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.base-pick-frame {
+  aspect-ratio: 1;
+  display: grid; place-items: center;
+  padding: 8px;
+  border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: var(--bg);
+  overflow: hidden;
+}
+.base-pick-frame img {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain; cursor: zoom-in;
+  border-radius: var(--radius);
+}
+.base-pick-frame .hint { margin: 0; text-align: center; padding: 0 10px; }
+
+@media (max-width: 1180px) {
+  .base-split { grid-template-columns: 1fr; }
+  .base-pick-frame { aspect-ratio: 16 / 9; }
+}
+/* Nút trong tiêu đề không được kéo dài cả hàng — nó là hành động phụ. */
+.sec-head .filebtn { flex: none; width: auto; margin: 0; }
+
+/* Đã gửi sang Content FB: khoá nút, đổi sang sắc "xong". Giữ nguyên chữ nên
+   nút không đổi bề ngang — đổi nhãn là cả hàng nút nhảy chỗ. */
+.btn-fb.sent {
+  background: var(--ok-soft);
+  border-color: var(--ok-line);
+  color: var(--ok);
+  cursor: default;
+  opacity: 1; /* đè .btn:disabled — làm mờ thì trông như hỏng, không phải "xong" */
+}
+.btn-fb.sent:hover { filter: none; }
+/* Viền ô ảnh cũng nói luôn, khỏi phải rê vào từng nút mới biết tấm nào đã gửi */
+.tile.is-sent { border-color: var(--ok-line); }
+
+/* ---------- Admin: chọn nhiều & thao tác hàng loạt ---------- */
+.admin-table th.chkcol, .admin-table td.chkcol { width: 28px; padding-right: 0; }
+.admin-table input[type="checkbox"] { cursor: pointer; }
+.admin-table tr.row-sel { background: var(--accent-soft); }
+
+.admin-selbar {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 10px; padding: 8px 10px;
+  border: 1px solid var(--accent-line); border-radius: var(--radius); background: var(--surface-2);
+}
+.admin-selbar .selcount { font-size: 0.8125rem; color: var(--text-2); }
+.admin-selbar .sep { width: 1px; height: 18px; background: var(--line); margin: 0 2px; }
+
+.admin-passbar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 10px; padding: 8px 10px;
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2);
+}
+.admin-passbar input:not([type]) { flex: 1; min-width: 140px; }
+.admin-passbar .btn { width: auto; margin: 0; white-space: nowrap; }
+
+.chk { display: inline-flex; align-items: center; gap: 5px; font-size: 0.8125rem; color: var(--text-2); cursor: pointer; }
+.chk input { cursor: pointer; }
+
+.admin-issued {
+  margin-bottom: 12px; padding: 10px 12px;
+  border: 1px solid var(--gold-line); border-radius: var(--radius); background: var(--surface-2);
+}
+.admin-issued textarea { width: 100%; resize: vertical; font-family: ui-monospace, monospace; font-size: 0.8125rem; }
+.admin-issued .hint svg { vertical-align: -2px; margin-right: 4px; }
+.admin-actionres { margin-bottom: 12px; }
+.bulk-updated { color: var(--accent); }
+.bulk-skipped { color: var(--text-3); }
+
+.ghost:disabled { opacity: 0.45; cursor: not-allowed; }
+.ghost.danger { color: var(--danger); }
+.ghost.danger:hover:not(:disabled) { background: var(--danger-soft); border-color: var(--danger-line); color: var(--danger); }
+.btn.danger { background: var(--danger); border-color: var(--danger); color: #fff; width: auto; margin: 0; white-space: nowrap; }
+.btn.danger:hover:not(:disabled) { filter: brightness(1.08); }
+
+.admin-confirm {
+  position: fixed; inset: 0; z-index: 70; background: var(--overlay);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.admin-confirm-box {
+  width: 100%; max-width: 460px; background: var(--surface);
+  border: 1px solid var(--danger-line); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel); padding: 18px;
+}
+.admin-confirm-box h3 { margin: 0 0 10px; font-size: 1rem; display: flex; align-items: center; gap: 7px; color: var(--danger); }
+.confirm-list { max-height: 200px; overflow: auto; font-size: 0.875rem; margin: 0 0 10px; }
+.confirm-list li { padding: 3px 0; display: flex; align-items: center; gap: 6px; }
+.admin-confirm-box p.warn {
+  font-size: 0.8125rem; color: var(--text-2); background: var(--danger-soft);
+  border: 1px solid var(--danger-line); border-radius: var(--radius);
+  padding: 8px 10px; margin: 0 0 12px;
+}
+.admin-confirm-row { display: flex; justify-content: flex-end; gap: 8px; }
+
+/* ---------- Công tắc chế độ chạy: Auto / Manual ----------
+   Trước đây nó dùng .mode-switch trơn nên trông y hệt công tắc nguồn Link/Text
+   đứng cách nó 10px — hai công tắc cùng hình dạng cạnh nhau thì mắt không bắt
+   được cái nào quan trọng. Chỗ này đổi HÌNH DẠNG (viên thuốc, trong khi mọi
+   segmented control khác của app đều là hộp bo 8px) chứ không chỉ đổi màu, nên
+   nó khác LOẠI với hàng xóm chứ không phải đậm hơn hàng xóm một chút.
+
+   Khối này CỐ Ý nằm cuối file: nó phải đứng sau .mode-switch.big thì padding 3px
+   mới ăn ở cả hai chỗ dùng (thanh nguồn dùng .big, cột phải Content FB thì không). */
+.flow-switch {
+  position: relative;
+  /* GRID chứ không phải flex: hai nhãn dài ngắn khác nhau ("Auto" 81px vs
+     "Manual" 97px) nên flex:1 trong hộp co theo nội dung vẫn ra hai ô LỆCH —
+     đo được lúc dựng, con trượt hụt 8px. Hai cột 1fr thì luôn bằng nhau, con
+     trượt mới chốt được ở đúng một nửa. */
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 3px;
+  border-radius: 999px;
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+}
+/* Con trượt đặc, chạy sang khi đổi chế độ. Chuyển động là thứ mắt bắt được
+   nhanh nhất — bấm xong thấy nó trượt là biết ngay mình vừa đổi cái gì. */
+.flow-switch::before {
+  content: '';
+  position: absolute; z-index: 0;
+  top: 3px; bottom: 3px; left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 1px 8px var(--accent-line);
+  transition: transform 0.24s cubic-bezier(0.34, 1.3, 0.5, 1);
+}
+.flow-switch[data-flow="manual"]::before { transform: translateX(100%); }
+.flow-switch .seg {
+  position: relative; z-index: 1;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: var(--text-3);
+  transition: color 0.18s ease;
+}
+.flow-switch .seg svg { flex: none; }
+.flow-switch .seg:hover { color: var(--text); }
+/* Đè .seg.active của segmented control thường: nền và viền đã do con trượt lo,
+   ô chỉ đổi màu CHỮ. Để nguyên nền sáng của .seg.active thì nó phủ kín con
+   trượt và mất sạch hiệu ứng. */
+.flow-switch .seg.active {
+  background: transparent;
+  border-color: transparent;
+  color: var(--accent-fg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow-switch::before { transition: none; }
+}
+
+/* ============================================================
+   CONTENT FB — "Mockup base" và "Yêu cầu add-in" đứng CẠNH nhau
+   Xếp dọc (bản cũ) thì khu thứ hai nằm dưới tầm nhìn: đo ở 1500×900 vùng cuộn
+   cao 371px trong khi nội dung 590px, khu "Yêu cầu add-in" chỉ hở 13px mép
+   trên. Mà đó là ô phải gõ mỗi lượt, còn "Mockup base" thường chỉ bấm chọn một
+   lần. Cạnh nhau thì chiều cao cần chỉ còn bằng khu cao nhất, hết cuộn.
+   Cột trái rộng hơn vì nó chứa lưới ảnh; cột phải chỉ có ô chữ.
+============================================================ */
+.content-cols {
+  /* Cột phải có SÀN 300px: chia thuần theo tỉ lệ thì ở màn 1280 nó tụt còn
+     281px và bốn ô nhập của chế độ Manual chật cứng (đo được). Cột trái để
+     minmax(0, …) nên nó là bên nhường chỗ, không phải bên đẩy tràn lưới. */
+  grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr);
+  align-items: start;
+}
+/* Báo lỗi thuộc về cả hai khu nên trải hết bề ngang, không nép vào một cột. */
+.content-cols > .error { grid-column: 1 / -1; }
+/* Ô xem ảnh đang chọn thu bớt: trong nửa bề ngang, để nguyên 240px là lưới
+   thumbnail chỉ còn nhét vừa 2 ảnh một hàng. */
+.content-cols .base-split { grid-template-columns: minmax(0, 1fr) 180px; }
+
+/* Màn hẹp: hai cột thành hai ô quá chật, xếp dọc lại như cũ. Mốc 1300px chứ
+   không phải 1180px như .base-split: cột giữa chỉ rộng bằng bề ngang cửa sổ trừ
+   540px hai bên, nên dưới 1300px thì cột trái không đủ chỗ cho lưới ảnh 96px
+   sau khi đã nhường 300px cho cột phải — chia tiếp là tràn. */
+@media (max-width: 1300px) {
+  .content-cols { grid-template-columns: 1fr; }
+  .content-cols .base-split { grid-template-columns: minmax(0, 1fr) 240px; }
+}
+@media (max-width: 1180px) {
+  .content-cols .base-split { grid-template-columns: 1fr; }
+}
+
+/* Lý do bị đá về màn đăng nhập (hết phiên / bị khoá). Dùng sắc "chú ý" chứ
+   không phải sắc lỗi đỏ: đây là chuyện bình thường, không phải app hỏng. */
+.login-notice {
+  margin-bottom: 14px; padding: 9px 11px;
+  border: 1px solid var(--gold-line); border-radius: var(--radius);
+  background: var(--gold-soft); color: var(--text-2);
+  font-size: 0.8125rem; line-height: 1.45;
+}
+
+/* Dấu bản chạy. LOCAL kêu to (vàng) vì đó là bản được phép nghịch; LIVE kín
+   tiếng nhưng vẫn luôn hiện, để "không có dấu" không bao giờ là một trạng thái
+   hợp lệ mà người dùng phải tự đoán. */
+.envbadge {
+  display: inline-block; vertical-align: 2px; margin-left: 7px;
+  padding: 1px 7px; border-radius: 999px;
+  font-size: 0.625rem; font-weight: 700; letter-spacing: 0.06em;
+  border: 1px solid var(--line);
+}
+.envbadge.local { color: var(--gold); border-color: var(--gold-line); background: var(--gold-soft); }
+.envbadge.live { color: var(--text-3); border-color: var(--line); background: var(--surface-2); }
+
+/* ============================================================
+   SẮC THƯƠNG HIỆU — nút chạy & công tắc chế độ
+   Hai control này đứng cạnh nhau trên thanh nguồn nên phải KHÁC NHAU rõ, mà
+   vẫn thuộc một họ. Cách chia: chúng lấy hai đầu đối nhau của cùng một dải
+   màu — nút chạy ăn nửa đậm (mực → xanh sâu), công tắc ăn đầu mint. Khác cả
+   sắc lẫn độ sáng, nên liếc một cái là phân biệt được, không cần đọc chữ.
+
+   Cả hai đều dùng lối "có chiều sâu": một vệt sáng mỏng ở mép trên giả ánh
+   sáng chiếu từ trên xuống, cộng bóng đổ ĂN THEO MÀU chính nó thay vì bóng
+   xám — bóng xám là bóng mặc định của framework, bóng cùng tông mới ra cảm
+   giác vật thể nổi trên mặt giấy.
+============================================================ */
+
+.btn-go {
+  background: linear-gradient(135deg, var(--brand-a) 0%, var(--brand-b) 100%);
+  border-color: var(--brand-a);
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 1px 2px rgba(0, 0, 0, 0.10),
+    0 8px 20px -8px var(--brand-b);
+}
+.btn-go:hover:not(:disabled) {
+  filter: brightness(1.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.30),
+    0 1px 2px rgba(0, 0, 0, 0.10),
+    0 11px 26px -9px var(--brand-b);
+}
+.btn-go:active:not(:disabled) {
+  /* Lún xuống 1px khi bấm: có chiều sâu thì phải có phản hồi chiều sâu, không
+     thì vệt sáng chỉ là hình vẽ. */
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.18), 0 2px 8px -4px var(--brand-b);
+}
+
+.flow-switch {
+  background: var(--brand-track);
+  border-color: var(--brand-track-line);
+}
+.flow-switch::before {
+  background: var(--brand-mint);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 62%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 1px 3px rgba(1, 72, 114, 0.24);
+}
+/* Chữ trên con trượt mint phải là mực đậm — mint là màu SÁNG, để chữ trắng lên
+   là không đọc được. Đây là lý do công tắc không dùng chung --accent-fg. */
+.flow-switch .seg.active { color: var(--brand-mint-fg); }
+
+/* Ô tick, nút radio và thanh trượt vốn do trình duyệt vẽ — mặc định là xanh hệ
+   thống của Windows, chọi hẳn với dải màu của app. accent-color kéo chúng về
+   đúng tông. Đặt ở đây, sau mọi luật khác, để không sót chỗ nào. */
+input[type="checkbox"], input[type="radio"], input[type="range"] {
+  accent-color: var(--accent);
+}
+
+/* Hai nút theme dính nhau thành một cụm, để đọc ra là một bộ điều khiển chứ
+   không phải hai nút rời tình cờ đứng cạnh. Nút đang cầm trịch thì sáng lên. */
+.theme-group { display: inline-flex; gap: 3px; flex: 0 0 auto; }
+.theme-toggle.on {
+  color: var(--accent);
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+}
+.theme-toggle.on:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+
+/* Model cố định (tài khoản thường). Trông như một ô nhập bị khoá chứ không phải
+   select hỏng — người dùng vẫn đọc được mình đang chạy model nào để báo lỗi. */
+.model-fixed {
+  padding: 7px 10px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface-2); color: var(--text-2);
+  font-size: 0.8125rem;
+}
+
+/* ---------- Có gì mới ---------- */
+.ver-btn {
+  flex: 0 0 auto; position: relative;
+  padding: 4px 9px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface-2);
+  color: var(--text-3); font: inherit; font-size: 0.6875rem; font-weight: 600;
+  letter-spacing: 0.02em; cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.ver-btn:hover { color: var(--text); border-color: var(--line-hot); }
+/* Chấm báo có bản mới. Dùng --gold chứ không phải --danger: đây là tin vui,
+   không phải cảnh báo hỏng. */
+.ver-btn.has-new { color: var(--gold); border-color: var(--gold-line); background: var(--gold-soft); }
+.ver-btn.has-new::after {
+  content: ''; position: absolute; top: -2px; right: -2px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 0 2px var(--surface);
+}
+
+.whatsnew {
+  width: 100%; max-width: 640px; max-height: calc(100vh - 80px);
+  display: flex; flex-direction: column;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-panel); overflow: hidden;
+}
+.whatsnew .admin-head h2 { display: flex; align-items: center; gap: 7px; }
+.wn-ver {
+  padding: 2px 9px; border-radius: 999px;
+  border: 1px solid var(--accent-line); background: var(--accent-soft); color: var(--accent);
+  font-size: 0.6875rem; font-weight: 700;
+}
+.wn-body { padding: 4px 18px 16px; overflow-y: auto; }
+
+.wn-rel { padding: 15px 0; border-bottom: 1px solid var(--line); }
+.wn-rel:last-child { border-bottom: 0; }
+/* Bản cũ mờ đi: người ta vào đây để biết CÁI VỪA ĐỔI, phần còn lại là tra cứu. */
+.wn-rel:not(.latest) { opacity: 0.62; }
+.wn-rel:not(.latest):hover { opacity: 1; }
+
+.wn-relhead { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 9px; }
+.wn-num { font-size: 0.875rem; font-weight: 700; letter-spacing: -0.01em; }
+.wn-title { font-size: 0.8125rem; color: var(--text-2); }
+.wn-date { font-size: 0.75rem; color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+.wn-items { margin: 0; display: grid; gap: 7px; }
+.wn-item { display: flex; gap: 9px; font-size: 0.8125rem; line-height: 1.55; color: var(--text-2); }
+.wn-item b { color: var(--text); font-weight: 600; }
+.wn-tag {
+  flex: none; min-width: 38px; height: 19px; margin-top: 1px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 5px; font-size: 0.625rem; font-weight: 700; letter-spacing: 0.03em;
+  border: 1px solid var(--line); color: var(--text-3); background: var(--surface-2);
+}
+.wn-item.new .wn-tag { color: var(--ok); border-color: var(--ok-line); background: var(--ok-soft); }
+.wn-item.fix .wn-tag { color: var(--info); border-color: var(--info-soft); background: var(--info-soft); }
+.wn-item.warn .wn-tag { color: var(--gold); border-color: var(--gold-line); background: var(--gold-soft); }
+
+.wn-foot {
+  flex: none; padding: 9px 18px; border-top: 1px solid var(--line);
+  background: var(--surface-2); color: var(--text-3); font-size: 0.75rem;
+}
+.wn-foot code { font-family: ui-monospace, monospace; color: var(--text-2); }

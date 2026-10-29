@@ -1,0 +1,16 @@
+# Nixpacks build config (Railway and other Nixpacks-based hosts).
+# 1 service: cài deps gốc (frontend) + deps server, build dist/, rồi chạy server
+# (server phục vụ luôn dist/ + /api). Node 22 cần cho node:sqlite.
+providers = ['node']
+
+[variables]
+NIXPACKS_NODE_VERSION = '22'
+
+[phases.install]
+cmds = ['npm ci', 'npm ci --prefix server']
+
+[phases.build]
+cmds = ['npm run build']
+
+[start]
+cmd = 'node server/index.js'

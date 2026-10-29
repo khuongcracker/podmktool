@@ -1,0 +1,269 @@
+<title>Hướng dẫn Podmktool</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #fbf9f4;
+    --surface: #ffffff;
+    --surface-2: #f4f1ea;
+    --ink: #20242b;
+    --muted: #6d6a60;
+    --line: #e7e2d6;
+    --gold: #b07d15;
+    --gold-soft: #f6edd6;
+    --blue: #2f6fb0;
+    --blue-soft: #e4eef8;
+    --shadow: 0 1px 2px rgba(30, 25, 10, .05), 0 8px 24px rgba(30, 25, 10, .06);
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15171c;
+      --surface: #1c1f26;
+      --surface-2: #23262e;
+      --ink: #eceef2;
+      --muted: #999ba3;
+      --line: #2d313a;
+      --gold: #e0ad4b;
+      --gold-soft: #33291296;
+      --blue: #7db2e6;
+      --blue-soft: #1b2c3f96;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15171c;
+    --surface: #1c1f26;
+    --surface-2: #23262e;
+    --ink: #eceef2;
+    --muted: #999ba3;
+    --line: #2d313a;
+    --gold: #e0ad4b;
+    --gold-soft: #33291296;
+    --blue: #7db2e6;
+    --blue-soft: #1b2c3f96;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 40px 22px 80px; }
+
+  header.hero { margin-bottom: 34px; }
+  .kicker {
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; margin: 0 0 10px;
+  }
+  h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.1; margin: 0 0 12px; text-wrap: balance; letter-spacing: -.02em; }
+  .lede { font-size: 17px; color: var(--muted); margin: 0; max-width: 60ch; }
+
+  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 0; }
+  nav.toc a {
+    text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600;
+    padding: 7px 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+    transition: border-color .15s, transform .1s;
+  }
+  nav.toc a:hover { border-color: var(--gold); }
+  nav.toc a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  section { margin-top: 44px; scroll-margin-top: 20px; }
+  .sec-head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; flex: none; }
+  .dot.gold { background: var(--gold); }
+  .dot.blue { background: var(--blue); }
+  .dot.grey { background: var(--muted); }
+  h2 { font-size: 24px; margin: 0; letter-spacing: -.01em; }
+  .sec-sub { color: var(--muted); margin: 2px 0 20px 26px; font-size: 15.5px; }
+
+  h3 { font-size: 15px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 26px 0 12px; font-weight: 700; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 6px 18px; margin: 12px 0;
+  }
+  .card.gold { border-left: 3px solid var(--gold); }
+  .card.blue { border-left: 3px solid var(--blue); }
+
+  /* button explainer rows */
+  .rows { display: flex; flex-direction: column; }
+  .row {
+    display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: start;
+    padding: 14px 0; border-top: 1px solid var(--line);
+  }
+  .row:first-child { border-top: none; }
+  .row p { margin: 0; }
+  .row .why { color: var(--ink); }
+  .row .why small { display: block; color: var(--muted); margin-top: 3px; font-size: 13.5px; }
+
+  .k {
+    display: inline-block; font-weight: 650; font-size: 13.5px; line-height: 1.35;
+    padding: 5px 10px; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--surface-2); color: var(--ink); white-space: nowrap;
+  }
+  .k.gold { border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); background: var(--gold-soft); }
+  .k.blue { border-color: color-mix(in srgb, var(--blue) 45%, var(--line)); background: var(--blue-soft); }
+
+  .callout {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 14px 16px; margin: 16px 0; font-size: 15px;
+  }
+  .callout .ico { font-size: 18px; line-height: 1.3; flex: none; }
+  .callout p { margin: 0; }
+
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+  .mode { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
+  .mode .tag { font-weight: 700; font-size: 15px; margin: 0 0 6px; }
+  .mode p { margin: 0; color: var(--muted); font-size: 14.5px; }
+
+  ul.plain { margin: 8px 0 0; padding-left: 20px; }
+  ul.plain li { margin: 6px 0; }
+  strong { font-weight: 650; }
+
+  footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+
+  @media (max-width: 560px) {
+    .row { grid-template-columns: 1fr; gap: 6px; }
+    .modes { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="kicker">Hướng dẫn sử dụng</p>
+    <h1>Podmktool</h1>
+    <p class="lede">Công cụ tạo <strong>ảnh mockup sản phẩm</strong> và biến chúng thành <strong>ảnh quảng cáo Facebook</strong>. Trang này giải thích từng nút để làm gì — không cần biết kỹ thuật.</p>
+    <nav class="toc">
+      <a href="#batdau">Bắt đầu</a>
+      <a href="#mockup">🟡 Tạo Mockup</a>
+      <a href="#ads">🔵 Tạo quảng cáo</a>
+      <a href="#redesign">🔒 Redesign</a>
+    </nav>
+  </header>
+
+  <section id="batdau">
+    <div class="sec-head"><span class="dot grey"></span><h2>Bắt đầu</h2></div>
+    <p class="sec-sub">Ba bước là chạy được.</p>
+    <div class="card">
+      <div class="rows">
+        <div class="row"><span class="k">1 · Mở tool</span><p class="why">Vào địa chỉ tool trên trình duyệt và <strong>đăng nhập</strong> bằng tài khoản được cấp.<small>Không có tài khoản thì liên hệ admin — tool không mở đăng ký.</small></p></div>
+        <div class="row"><span class="k">2 · Chọn tab</span><p class="why">Trên cùng có 3 tab: <strong>🟡 New Mockup</strong> (tạo ảnh sản phẩm), <strong>🔵 Ads FB</strong> (tạo ảnh quảng cáo), <strong>🔒 Redesign</strong> (đang khoá).</p></div>
+        <div class="row"><span class="k">3 · Đổi ngôn ngữ</span><p class="why">Bấm lá cờ 🇻🇳 / 🇬🇧 ở góc trên phải để đổi toàn bộ giao diện.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mockup">
+    <div class="sec-head"><span class="dot gold"></span><h2>🟡 New Mockup — Tạo ảnh sản phẩm</h2></div>
+    <p class="sec-sub">Từ một tấm ảnh (hoặc một link sản phẩm) → ra nhiều ảnh mockup ở bối cảnh đẹp, khác nhau.</p>
+
+    <h3>Chọn cách làm</h3>
+    <div class="modes">
+      <div class="mode"><p class="tag">🎛️ Tùy biến</p><p>Bạn tự quyết: bao nhiêu ảnh, góc chụp nào, bối cảnh ra sao. Linh hoạt nhất.</p></div>
+      <div class="mode"><p class="tag">🎬 Lifestyle Combo</p><p>Bấm một nút, ra sẵn <strong>5 kiểu ảnh chuẩn</strong> của team. Nhanh gọn, khỏi chỉnh.</p></div>
+    </div>
+    <div class="callout"><span class="ico">💡</span><p>Đổi qua lại giữa hai chế độ sẽ <strong>xoá kết quả</strong> đang hiện — mỗi chế độ có khu ảnh riêng, không lẫn nhau.</p></div>
+
+    <h3>Nạp thông tin sản phẩm</h3>
+    <div class="card gold">
+      <div class="rows">
+        <div class="row"><span class="k gold">🔗 Link store</span><p class="why">Dán <strong>link sản phẩm</strong> (Shopify/store). Tool tự đọc thông tin và lấy ảnh.</p></div>
+        <div class="row"><span class="k gold">📝 Dán text</span><p class="why">Dán <strong>mô tả sản phẩm</strong> (công năng · mục đích · khách hàng mục tiêu). Tool tự bóc tách thành các ô thông tin.<small>Với cách này, nhớ <strong>upload 1 ảnh sản phẩm</strong> — chữ không kèm ảnh.</small></p></div>
+        <div class="row"><span class="k gold">Main / Sub Ref</span><p class="why">Các ô <strong>ảnh sản phẩm gốc</strong>. Tool nhìn ảnh này để vẽ đúng sản phẩm của bạn. Ô chính bắt buộc, 4 ô phụ thêm khi máy nhận nhầm.</p></div>
+      </div>
+    </div>
+
+    <h3>Nút tạo ảnh</h3>
+    <div class="card gold">
+      <div class="rows">
+        <div class="row"><span class="k gold">⚡ Auto toàn bộ</span><p class="why">Làm hết từ A đến Z: đọc thông tin → nghĩ bối cảnh → ra ảnh. Dùng lần đầu.<small>Nhãn ghi <strong>L2P</strong> (từ Link) hoặc <strong>T2P</strong> (từ Text) theo nguồn đang chọn.</small></p></div>
+        <div class="row"><span class="k gold">🖼️ Chỉ tạo ảnh</span><p class="why">Tạo lại ảnh sau khi bạn đã chỉnh tay nội dung/bối cảnh. Nhanh hơn vì bỏ qua bước đọc thông tin.</p></div>
+        <div class="row"><span class="k gold">🎬 Tạo Combo</span><p class="why">(Chế độ Combo) Ra ngay <strong>5 ảnh chuẩn</strong>: cận sản phẩm · có người mẫu · chụp xa · cầm trên tay/tặng quà · sản phẩm đặt đúng nơi dùng.</p></div>
+        <div class="row"><span class="k gold">Số lượng</span><p class="why"><strong>1/ảnh</strong> = mỗi ảnh một sản phẩm. <strong>Theo ref</strong> = giữ đúng số sản phẩm có trong ảnh gốc (ảnh gốc 3 cái → ra 3 cái).</p></div>
+        <div class="row"><span class="k gold">Count</span><p class="why">Kéo để chọn tạo bao nhiêu ảnh một lượt.</p></div>
+        <div class="row"><span class="k gold">✕ Xoá kết quả</span><p class="why">Dọn sạch các ảnh đang hiện để làm lứa mới.</p></div>
+      </div>
+    </div>
+
+    <h3>Chọn góc &amp; bối cảnh</h3>
+    <div class="card gold">
+      <div class="rows">
+        <div class="row"><span class="k gold">🎥 Góc camera</span><p class="why">Bấm chọn các <strong>kiểu góc chụp</strong> muốn có (chính diện, chụp xa, cận chất liệu, có người…). Chấm màu cho biết góc đó tôn <em>công năng</em>, <em>thiết kế</em>, hay cả hai.</p></div>
+        <div class="row"><span class="k gold">Chip Cận/Vừa/Xa/Người</span><p class="why">Trên mỗi dòng bối cảnh — đổi <strong>kiểu khung hình</strong> cho ảnh đó.</p></div>
+        <div class="row"><span class="k gold">↻ (ở dòng bối cảnh)</span><p class="why">Nhờ AI <strong>gợi ý lại</strong> bối cảnh cho riêng dòng đó.</p></div>
+      </div>
+    </div>
+
+    <h3>Nút trên mỗi ảnh vừa tạo</h3>
+    <div class="card gold">
+      <div class="rows">
+        <div class="row"><span class="k gold">BG</span><p class="why">Đổi <strong>phông nền</strong>, giữ nguyên sản phẩm.</p></div>
+        <div class="row"><span class="k gold">− / +</span><p class="why"><strong>Thu nhỏ / phóng to</strong> sản phẩm trong ảnh.</p></div>
+        <div class="row"><span class="k gold">↻</span><p class="why"><strong>Tạo lại</strong> ảnh đó.</p></div>
+        <div class="row"><span class="k gold">★</span><p class="why">Chọn ảnh này làm <strong>ảnh chuẩn</strong> — các lần tạo sau bám theo nó.</p></div>
+        <div class="row"><span class="k gold">S+</span><p class="why">Đưa ảnh vào ô ảnh phụ (Sub Ref).</p></div>
+        <div class="row"><span class="k gold">→Ad</span><p class="why"><strong>Gửi ảnh này sang tab Ads FB</strong> để làm quảng cáo. Ảnh được <strong>lưu cố định</strong> bên đó, dù bạn tạo ảnh mới ở đây.</p></div>
+        <div class="row"><span class="k gold">⤓ / Tải ZIP</span><p class="why">Tải một ảnh, hoặc <strong>tải tất cả</strong> thành file ZIP.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ads">
+    <div class="sec-head"><span class="dot blue"></span><h2>🔵 Ads FB — Tạo ảnh quảng cáo</h2></div>
+    <p class="sec-sub">Lấy một mockup → thêm <strong>chữ quảng cáo</strong> (tiêu đề, câu phụ, nhãn) → ra ảnh chạy Facebook. Sản phẩm giữ nguyên, chữ không bao giờ che sản phẩm.</p>
+
+    <h3>Ba thứ để nhập (chỉ ảnh là bắt buộc)</h3>
+    <div class="card blue">
+      <div class="rows">
+        <div class="row"><span class="k blue">Mockup base</span><p class="why">Ảnh nền — lấy từ tab Mockup (bấm <strong>→Ad</strong>) hoặc <strong>upload</strong>. Chọn 1 ảnh; di chuột vào ảnh có nút <strong>×</strong> để bỏ.</p></div>
+        <div class="row"><span class="k blue">Yêu cầu add-in</span><p class="why">Nội dung chữ muốn thêm. Có 2 cách nhập (xem dưới).</p></div>
+        <div class="row"><span class="k blue">Ref (tuỳ chọn)</span><p class="why">Ảnh mẫu để bám phong cách. Không có cũng được.</p></div>
+      </div>
+    </div>
+
+    <h3>Nhập nội dung: Auto hay Manual</h3>
+    <div class="modes">
+      <div class="mode"><p class="tag">Auto</p><p>Chỉ gõ một câu mô tả (hoặc để trống) rồi bấm Tạo — AI tự viết tiêu đề, câu phụ, nhãn cho bạn.</p></div>
+      <div class="mode"><p class="tag">Manual</p><p>Tự điền từng ô: tiêu đề, câu phụ, nhãn — kiểm soát tối đa.</p></div>
+    </div>
+    <div class="callout"><span class="ico">✦</span><p>Ở chế độ Auto, bấm <strong>Phân tích</strong> để AI bóc câu mô tả ra từng ô, rồi tự chuyển sang Manual cho bạn xem &amp; sửa.</p></div>
+
+    <h3>Các ô chữ (chế độ Manual)</h3>
+    <div class="card blue">
+      <div class="rows">
+        <div class="row"><span class="k blue">Headline</span><p class="why"><strong>Tiêu đề lớn</strong>, câu bắt mắt nhất.</p></div>
+        <div class="row"><span class="k blue">Text</span><p class="why"><strong>Câu phụ</strong> hỗ trợ, nhỏ hơn.</p></div>
+        <div class="row"><span class="k blue">Helptext — nội dung</span><p class="why">Câu kêu gọi / nhãn, ví dụ “Customize your design”.</p></div>
+        <div class="row"><span class="k blue">Helptext — style</span><p class="why"><strong>Kiểu trình bày</strong> của nhãn đó: dạng badge/ruy-băng, màu, kiểu chữ.</p></div>
+        <div class="row"><span class="k blue">Helptext — vị trí</span><p class="why">Đặt nhãn ở <strong>góc/cạnh nào</strong> (Auto, hoặc chọn ô góc trên/dưới trái-phải).</p></div>
+      </div>
+    </div>
+    <div class="callout"><span class="ico">📝</span><p>Ô nào <strong>để trống thì bỏ qua</strong> lớp chữ đó — không bắt buộc điền hết.</p></div>
+
+    <h3>Ảnh mẫu &amp; tạo</h3>
+    <div class="card blue">
+      <div class="rows">
+        <div class="row"><span class="k blue">Ref tổng thể</span><p class="why">Ảnh mẫu cho <strong>phong cách cả tấm quảng cáo</strong> (font, màu, bố cục). AI học rồi vẽ lại mới cho nét.</p></div>
+        <div class="row"><span class="k blue">Ref helptext</span><p class="why">Ảnh mẫu <strong>riêng cho cái nhãn/badge</strong> — muốn nhãn giống hệt kiểu nào thì đưa vào đây.</p></div>
+        <div class="row"><span class="k blue">Số mẫu (1–4)</span><p class="why">Tạo mấy phiên bản một lượt (mỗi bản một bố cục khác).</p></div>
+        <div class="row"><span class="k blue">⚡ Tạo creative</span><p class="why">Bấm để ra ảnh — kết quả hiện ngay cột bên phải, mỗi ảnh có nút <strong>⤓ Tải</strong>.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="redesign">
+    <div class="sec-head"><span class="dot grey"></span><h2>🔒 Redesign</h2></div>
+    <p class="sec-sub">Đang khoá — tính năng làm mới thiết kế sẽ mở sau.</p>
+  </section>
+
+  <footer>
+    <p>Mẹo: hầu hết ô thông tin đều <strong>để AI gợi ý sẵn nhưng vẫn sửa tay được</strong>. Cứ thử — không ưng thì bấm tạo lại.</p>
+  </footer>
+</div>
